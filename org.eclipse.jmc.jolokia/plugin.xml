@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.openjdk.jmc.rjmx.descriptorProvider">
+      <provider
+            class="org.eclipse.jmc.jolokia.JolokiaDiscoveryListener">
+      </provider>
+   </extension>
+
+</plugin>

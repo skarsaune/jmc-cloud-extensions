@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jolokia JMC Support
+Bundle-SymbolicName: org.eclipse.jmc.jolokia;singleton:=true
+Bundle-Version: 7.1.0.qualifier
+Automatic-Module-Name: org.eclipse.jmc.jolokia
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.openjdk.jmc.rjmx,
+ org.openjdk.jmc.ui,
+ org.openjdk.jmc.attach
