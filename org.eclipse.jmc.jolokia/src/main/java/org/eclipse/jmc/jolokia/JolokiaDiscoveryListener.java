@@ -1,4 +1,4 @@
-package org.eclipse.jmc.jolokia;
+/*package org.eclipse.jmc.jolokia;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
 	
 	/**
 	 * This is where we periodically scan the local machines and report deltas to the listeners.
-	 */
+	 *
 	private class LocalScanner implements Runnable {
 		boolean isRunning;
 
@@ -41,7 +41,7 @@ public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
 
 		/**
 		 * Marks this scanner as terminated.
-		 */
+		 *
 		public void shutdown() {
 			isRunning = false;
 		}
@@ -81,4 +81,4 @@ public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
 	}
 
 
-}
+}*/

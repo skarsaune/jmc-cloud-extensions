@@ -1,4 +1,4 @@
-package org.eclipse.jmc.jolokia;
+/*package org.eclipse.jmc.jolokia;
 
 import org.eclipse.osgi.util.NLS;
 
@@ -13,4 +13,4 @@ public class Messages extends NLS {
 
 	private Messages() {
 	}
-}
+}*/
