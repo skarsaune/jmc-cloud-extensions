@@ -7,5 +7,11 @@
             class="org.eclipse.jmc.jolokia.JolokiaDiscoveryListener">
       </provider>
    </extension>
+      <extension
+         point="org.openjdk.jmc.rjmx.jmxProtocols">
+      <client
+            class="org.jolokia.client.jmxadapter.JolokiaJmxConnectionProvider" protocol="jolokia">
+      </client>
+   </extension>
 
 </plugin>

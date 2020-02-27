@@ -1,11 +1,5 @@
-/*package org.eclipse.jmc.jolokia;
+package org.eclipse.jmc.jolokia;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import org.openjdk.jmc.browser.attach.LocalJVMToolkit;
-import org.openjdk.jmc.browser.attach.LocalJVMToolkit.DiscoveryEntry;
 import org.openjdk.jmc.rjmx.descriptorprovider.AbstractDescriptorProvider;
 
 public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
@@ -79,6 +73,6 @@ public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
 			}
 		}
 	}
+*/
 
-
-}*/
+}
