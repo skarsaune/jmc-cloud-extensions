@@ -4,14 +4,12 @@ import org.openjdk.jmc.rjmx.descriptorprovider.AbstractDescriptorProvider;
 
 public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
 
-	@Override
 	public String getName() {
-		return Messages.JolokiaDiscoveryListener_Name;
+		return "Jolokia Discovery Listener";
 	}
 
-	@Override
 	public String getDescription() {
-		return Messages.JolokiaDiscoveryListener_Description;
+		return "List JVM with Jolokia agent broadcasting its presence";
 	}
 	
 	/**

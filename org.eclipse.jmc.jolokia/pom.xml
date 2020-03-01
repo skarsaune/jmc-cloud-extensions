@@ -3,15 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-<!-- 	<parent> -->
-<!-- 		<groupId>org.openjdk.jmc</groupId> -->
-<!-- 		<artifactId>missioncontrol.application</artifactId> -->
-<!-- 		<version>7.1.0-SNAPSHOT</version> -->
-<!-- 	</parent> -->
+	<!-- <parent> -->
+	<!-- <groupId>org.openjdk.jmc</groupId> -->
+	<!-- <artifactId>missioncontrol.application</artifactId> -->
+	<!-- <version>7.1.0-SNAPSHOT</version> -->
+	<!-- </parent> -->
 	<groupId>org.jolokia.jmc</groupId>
 	<artifactId>org.eclipse.jmc.jolokia</artifactId>
 	<version>1.6.3-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<build>
 
 		<plugins>
@@ -29,8 +29,8 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-jmockit-before-test</id>
-						<phase>test-compile</phase>
+						<id>copy-external-dependencies</id>
+						<phase>compile</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
@@ -38,11 +38,35 @@
 							<stripVersion>true</stripVersion>
 							<includeArtifactIds>jolokia-jvm</includeArtifactIds>
 							<includeGroupIds>org.jolokia</includeGroupIds>
-							<includeScope>test</includeScope>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<instructions>
+						<Export-Package>
+							org.eclipse.jmc.jolokia.*
+						</Export-Package>
+						<Bundle-SymbolicName>org.eclipse.jmc.jolokia</Bundle-SymbolicName>
+						<Bundle-Description>Jolokia JMX adapter support for JMC
+						</Bundle-Description>
+					</instructions>
+				</configuration>
+			</plugin>
+
 
 			<!-- <plugin> -->
 			<!-- <groupId>org.apache.maven.plugins</groupId> -->
@@ -75,6 +99,11 @@
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjdk.jmc</groupId>
+			<artifactId>org.openjdk.jmc.rjmx</artifactId>
+			<version>7.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

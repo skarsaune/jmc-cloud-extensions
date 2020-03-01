@@ -8,7 +8,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.openjdk.jmc.rjmx,
  org.openjdk.jmc.ui,
  org.openjdk.jmc.attach,
- org.eclipse.osgi.util
+ org.eclipse.osgi.util,
+ org.junit
 Import-Package:  org.openjdk.jmc.rjmx.descriptorprovider
 Bundle-ClassPath: target/dependency/commons-logging-1.1.1.jar,
  target/dependency/httpcore-4.4.7.jar,
@@ -18,5 +19,6 @@ Bundle-ClassPath: target/dependency/commons-logging-1.1.1.jar,
  target/dependency/jolokia-jvm-1.6.3-SNAPSHOT.jar,
  target/dependency/json-simple-1.1.1.jar,
  .,
- target/dependency/httpclient-osgi-4.5.3.jar
+ target/dependency/httpclient-osgi-4.5.3.jar,
+ target/org.eclipse.jmc.jolokia-1.6.3-SNAPSHOT.jar
 Export-Package: org.eclipse.jmc.jolokia

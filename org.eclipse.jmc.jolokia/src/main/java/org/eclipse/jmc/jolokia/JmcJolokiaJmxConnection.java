@@ -57,10 +57,17 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 				localInfo = ManagementFactory.getPlatformMBeanServer().getMBeanInfo(name);
 			} catch (Exception ignore) {
 			}
+			MBeanOperationInfo[] modifiedOperations = new MBeanOperationInfo[mBeanInfo.getOperations().length];
 
 			for (int i = 0; i < mBeanInfo.getOperations().length; i++) {
-				mBeanInfo.getOperations()[i] = stealOrBuildOperationInfo(mBeanInfo.getOperations()[i], localInfo);
+				modifiedOperations[i] = stealOrBuildOperationInfo(mBeanInfo.getOperations()[i], localInfo);
 			}
+			//create a copy with modified operations in place of the original MBeanInfo in the cache
+			final MBeanInfo modifiedMBeanInfo = new MBeanInfo(mBeanInfo.getClassName(), mBeanInfo.getDescription(), mBeanInfo.getAttributes(),
+					mBeanInfo.getConstructors(), modifiedOperations, mBeanInfo.getNotifications());
+			this.mbeanInfoCache.put(name,
+					modifiedMBeanInfo);
+			return modifiedMBeanInfo;
 		}
 		return mBeanInfo;
 	}
@@ -94,7 +101,7 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 				}
 			}
 		}
-		//if not reverse engineer descriptor from operation info
+		// if not reverse engineer descriptor from operation info
 		DescriptorSupport result = new DescriptorSupport();
 		result.setField(NAME, original.getName());
 		result.setField(DESCRIPTION, original.getDescription());
@@ -117,16 +124,17 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 		result.setField(ARGUMENT_NAME, parameter.getName());
 		boolean isMultiple = parameter.getType().startsWith("[");
 		result.setField(ARGUMENT_MULITPLE, String.valueOf(isMultiple));
-		String type=parameter.getType();
-		if(isMultiple) {
-			if(type.startsWith("[L")) {
-				type=type.substring(2);
+		String type = parameter.getType();
+		if (isMultiple) {
+			if (type.startsWith("[L")) {
+				type = type.substring(2);
 			} else {
-				type=type.substring(1);
+				type = type.substring(1);
 			}
-			
-		} 
-		//probably more reverse mapping of types should be done here, but we hope it is sufficient
+
+		}
+		// probably more reverse mapping of types should be done here, but we hope it is
+		// sufficient
 		result.setField(ARGUMENT_TYPE, parameter.getType());
 		result.setField(ARGUMENT_DESCRIPTION, parameter.getDescription());
 		result.setField(ARGUMENT_MANDATORY, "false");
