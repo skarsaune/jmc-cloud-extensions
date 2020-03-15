@@ -99,7 +99,7 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 
 		try {
 			AttributeList attributes = adapter.getAttributes(new ObjectName(ManagementFactory.RUNTIME_MXBEAN_NAME),
-					new String[] { "Pid", "Name", "InputArguments", "SystemProperties", "VmVersion" });
+					new String[] { "Pid", "Name", "InputArguments", "SystemProperties" });
 			Integer pid = null;
 			String arguments = null;
 			String javaCommand = null;
@@ -124,8 +124,6 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 						} catch (NumberFormatException e) {
 						}
 					}
-				} else if (attribute.getName().equalsIgnoreCase("VmVersion")) {
-					javaVersion = String.valueOf(attribute.getValue());
 				} else if (attribute.getName().equalsIgnoreCase("InputArguments")) {
 
 					if (attribute.getValue() instanceof String[]) {
@@ -158,6 +156,8 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 							}
 						} else if (key.equalsIgnoreCase("sun.java.command")) {
 							javaCommand = value;
+						} else if(key.equalsIgnoreCase("java.version")) {
+							javaVersion = value;
 						}
 
 					}
