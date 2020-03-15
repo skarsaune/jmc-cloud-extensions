@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='org.openjdk.jmc.jolokia' version='7.1.0.202003101936'>
+    <properties size='5'>
+      <property name='artifact.size' value='2001'/>
+      <property name='download.size' value='2001'/>
+      <property name='maven-groupId' value='org.openjdk.jmc'/>
+      <property name='maven-artifactId' value='org.openjdk.jmc.jolokia'/>
+      <property name='maven-version' value='7.1.0-SNAPSHOT'/>
+    </properties>
+  </artifact>
+</artifacts>

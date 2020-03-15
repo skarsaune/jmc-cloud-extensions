@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jolokia JMC Connection
+Bundle-SymbolicName: org.openjdk.jmc.jolokia;singleton:=true
+Bundle-Version: 7.1.0.qualifier
+Automatic-Module-Name: org.openjdk.jmc.jolokia
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.openjdk.jmc.rjmx;bundle-version="7.1.0"
+Export-Package: org.openjdk.jmc.jolokia
+Bundle-ClassPath: target/dependency/jolokia-client-java-1.6.3-SNAPSHOT.jar,
+ target/dependency/jolokia-core-1.6.3-SNAPSHOT.jar,
+ target/dependency/jolokia-jmx-adapter-1.6.3-SNAPSHOT.jar,
+ target/dependency/jolokia-jvm-1.6.3-SNAPSHOT.jar,
+ target/dependency/json-simple-1.1.1.jar,
+ .,
+ target/classes/,
+ target/dependency/httpclient-osgi-4.5.3.jar,
+ target/dependency/httpcore-4.4.7.jar,
+ target/dependency/commons-logging-1.1.1.jar
+Import-Package: org.openjdk.jmc.rjmx.descriptorprovider
