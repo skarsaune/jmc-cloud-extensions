@@ -10,7 +10,7 @@
 	<!-- </parent> -->
 	<groupId>org.jolokia.jmc</groupId>
 	<artifactId>org.eclipse.jmc.jolokia</artifactId>
-	<version>1.6.3-SNAPSHOT</version>
+	<version>7.1.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<build>
 

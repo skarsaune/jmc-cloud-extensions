@@ -1,22 +1,15 @@
 package org.openjdk.jmc.jolokia;
 
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map.Entry;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
-import javax.management.InstanceNotFoundException;
-import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
-import javax.management.openmbean.TabularData;
 import javax.management.openmbean.TabularDataSupport;
 import javax.management.remote.JMXServiceURL;
 
@@ -166,7 +159,7 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 
 			}
 			return new JVMDescriptor(javaVersion, type, arch, javaCommand, arguments, pid, isDebug,
-					Connectable.UNKNOWN);
+					Connectable.ATTACHABLE);
 
 		} catch (Exception ignore) {
 		}

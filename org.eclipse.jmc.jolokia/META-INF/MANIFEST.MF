@@ -20,5 +20,5 @@ Bundle-ClassPath: target/dependency/commons-logging-1.1.1.jar,
  target/dependency/json-simple-1.1.1.jar,
  .,
  target/dependency/httpclient-osgi-4.5.3.jar,
- target/org.eclipse.jmc.jolokia-1.6.3-SNAPSHOT.jar
+ target/org.eclipse.jmc.jolokia-7.1.0-SNAPSHOT.jar
 Export-Package: org.eclipse.jmc.jolokia

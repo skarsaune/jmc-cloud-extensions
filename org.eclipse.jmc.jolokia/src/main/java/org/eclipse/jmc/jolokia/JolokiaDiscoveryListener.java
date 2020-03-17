@@ -1,8 +1,10 @@
 package org.eclipse.jmc.jolokia;
 
-import org.openjdk.jmc.rjmx.descriptorprovider.AbstractDescriptorProvider;
+import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
+import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorProvider;
 
-public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
+
+public class JolokiaDiscoveryListener implements IDescriptorProvider {
 
 	public String getName() {
 		return "Jolokia Discovery Listener";
@@ -10,6 +12,18 @@ public class JolokiaDiscoveryListener extends AbstractDescriptorProvider {
 
 	public String getDescription() {
 		return "List JVM with Jolokia agent broadcasting its presence";
+	}
+
+	@Override
+	public void addDescriptorListener(IDescriptorListener l) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeDescriptorListener(IDescriptorListener l) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**

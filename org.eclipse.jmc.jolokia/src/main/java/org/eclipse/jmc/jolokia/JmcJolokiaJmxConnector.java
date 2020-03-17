@@ -13,11 +13,11 @@ public class JmcJolokiaJmxConnector extends JolokiaJmxConnector {
 
 	public JmcJolokiaJmxConnector(JMXServiceURL serviceURL, Map<String, ?> environment) {
 		super(serviceURL, environment);
-
 	}
+	
 	@Override
-	protected RemoteJmxAdapter instantiateAdapter(J4pClientBuilder clientBuilder) throws IOException {
-		//Override to ensure we get our own guy in here
+	protected RemoteJmxAdapter instantiateAdapter(J4pClientBuilder clientBuilder, Map<String, Object> mergedEnv)
+			throws IOException {
 		return new JmcJolokiaJmxConnection(clientBuilder.build());
 	}
 }
