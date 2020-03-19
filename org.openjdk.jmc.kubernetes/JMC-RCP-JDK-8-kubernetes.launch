@@ -2,6 +2,7 @@
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
     <setAttribute key="additional_plugins">
         <setEntry value="org.openjdk.jmc.jolokia:7.1.0.qualifier:default:true:default:default"/>
+        <setEntry value="org.openjdk.jmc.kubernetes:7.1.0.qualifier:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
     <booleanAttribute key="askclear" value="true"/>
@@ -12,7 +13,7 @@
     <booleanAttribute key="clearConfig" value="true"/>
     <booleanAttribute key="clearws" value="true"/>
     <booleanAttribute key="clearwslog" value="false"/>
-    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/JMC-RCP-JDK-8-jolokia"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/JMC-RCP-JDK-8-kubernetes"/>
     <booleanAttribute key="default" value="false"/>
     <stringAttribute key="featureDefaultLocation" value="workspace"/>
     <stringAttribute key="featurePluginResolution" value="workspace"/>

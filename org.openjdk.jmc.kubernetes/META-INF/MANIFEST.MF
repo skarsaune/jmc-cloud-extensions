@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Kubernetes JMC extensions
+Bundle-SymbolicName: org.openjdk.jmc.kubernetes;singleton:=true
+Bundle-Version: 7.1.0.qualifier
+Automatic-Module-Name: org.openjdk.jmc.kubernetes
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.openjdk.jmc.jolokia;bundle-version="7.1.0"
+Bundle-ClassPath: target/dependency/client-java-5.0.0.jar,
+ target/dependency/client-java-api-5.0.0.jar,
+ target/dependency/httpclient-osgi-4.5.3.jar,
+ target/dependency/httpcore-4.4.7.jar,
+ target/dependency/jolokia-client-java-1.6.3-SNAPSHOT.jar,
+ target/dependency/jolokia-core-1.6.3-SNAPSHOT.jar,
+ target/dependency/jolokia-jmx-adapter-1.6.3-SNAPSHOT.jar,
+ target/dependency/jolokia-kubernetes-1.6.3-SNAPSHOT.jar,
+ target/dependency/json-simple-1.1.1.jar,
+ target/classes,
+ .,
+ target/dependency/okhttp-2.7.5.jar
+Export-Package: org.openjdk.jmc.kubernetes
