@@ -1,6 +1,0 @@
-/bin/
-/org.eclipse.jmc.jolokia/
-.idea/
-target/
-*.iml
-/testbin/
