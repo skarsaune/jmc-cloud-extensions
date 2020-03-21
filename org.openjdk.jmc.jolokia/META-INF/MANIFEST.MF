@@ -6,10 +6,16 @@ Bundle-Version: 7.1.0.qualifier
 Automatic-Module-Name: org.openjdk.jmc.jolokia
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.openjdk.jmc.rjmx;bundle-version="7.1.0"
-Export-Package: org.jolokia.client,
+Export-Package: org.apache.http.client,
+ org.jolokia.client,
  org.jolokia.client.jmxadapter,
  org.jolokia.converter,
- org.openjdk.jmc.jolokia
+ org.openjdk.jmc.jolokia,
+ org.apache.commons.codec.binary,
+ org.apache.http,
+ org.apache.http.client.methods,
+ org.apache.http.message,
+ org.apache.http.entity
 Bundle-ClassPath: target/dependency/jolokia-client-java-1.6.3-SNAPSHOT.jar,
  target/dependency/jolokia-core-1.6.3-SNAPSHOT.jar,
  target/dependency/jolokia-jmx-adapter-1.6.3-SNAPSHOT.jar,
