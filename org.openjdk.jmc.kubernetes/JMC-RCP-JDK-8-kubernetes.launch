@@ -51,6 +51,7 @@
         <setEntry value="org.openjdk.jmc.feature.flightrecorder.ext.jfx:default"/>
         <setEntry value="org.openjdk.jmc.feature.flightrecorder.metadata:default"/>
         <setEntry value="org.openjdk.jmc.feature.flightrecorder:default"/>
+        <setEntry value="org.openjdk.jmc.feature.ide:default"/>
         <setEntry value="org.openjdk.jmc.feature.rcp:default"/>
         <setEntry value="org.openjdk.jmc.rcp.product:default"/>
     </setAttribute>

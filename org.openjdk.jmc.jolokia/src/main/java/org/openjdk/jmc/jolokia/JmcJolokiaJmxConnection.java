@@ -2,18 +2,25 @@ package org.openjdk.jmc.jolokia;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.LinkedList;
+import java.util.Stack;
 
+import javax.management.AttributeNotFoundException;
 import javax.management.Descriptor;
 import javax.management.ImmutableDescriptor;
 import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
 import javax.management.MBeanInfo;
 import javax.management.MBeanOperationInfo;
 import javax.management.MBeanParameterInfo;
 import javax.management.ObjectName;
 import javax.management.modelmbean.DescriptorSupport;
+import javax.management.openmbean.TabularData;
 
 import org.jolokia.client.J4pClient;
 import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
+import org.jolokia.converter.Converters;
+import org.jolokia.converter.json.JsonConvertOptions;
 
 /**
  * 
@@ -70,6 +77,22 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 			return modifiedMBeanInfo;
 		}
 		return mBeanInfo;
+	}
+	
+	@Override
+	public Object invoke(ObjectName name, String operationName, Object[] params, String[] signature)
+			throws InstanceNotFoundException, MBeanException, IOException {
+		for (int i = 0; i < params.length; i++) {
+			Object object = params[i];
+			if(object instanceof TabularData) {
+				try {
+					params[i]=new Converters().getToJsonConverter().convertToJson(object, new LinkedList<String>(), JsonConvertOptions.DEFAULT);
+				} catch (AttributeNotFoundException ignore) {
+				}
+			}
+			
+		}
+		return super.invoke(name, operationName, params, signature);
 	}
 
 	/**
