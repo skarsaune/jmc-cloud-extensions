@@ -15,7 +15,8 @@ Export-Package: org.apache.http.client,
  org.apache.http,
  org.apache.http.client.methods,
  org.apache.http.message,
- org.apache.http.entity
+ org.apache.http.entity,
+ org.jolokia.client.exception
 Bundle-ClassPath: target/dependency/jolokia-client-java-1.6.3-SNAPSHOT.jar,
  target/dependency/jolokia-core-1.6.3-SNAPSHOT.jar,
  target/dependency/jolokia-jmx-adapter-1.6.3-SNAPSHOT.jar,

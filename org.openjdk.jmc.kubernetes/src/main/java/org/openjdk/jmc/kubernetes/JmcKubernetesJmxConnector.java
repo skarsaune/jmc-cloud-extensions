@@ -18,6 +18,6 @@ public class JmcKubernetesJmxConnector extends KubernetesJmxConnector {
 	
 	@Override
 	protected RemoteJmxAdapter createAdapter(J4pClient client) throws IOException {
-		return new JmcJolokiaJmxConnection(client);
+		return new JmcKubernetesJmxConnection(client);
 	}
 }
