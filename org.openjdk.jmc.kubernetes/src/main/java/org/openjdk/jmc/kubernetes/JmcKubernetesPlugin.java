@@ -46,8 +46,8 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 	}
 
 	@Override
-	public String usePort() {
-		return getPreferenceStore().getString(P_USE_PORT);
+	public String portAnnotation() {
+		return getPreferenceStore().getString(P_PORT_ANNOTATION);
 	}
 
 	@Override
@@ -58,6 +58,16 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 	@Override
 	public String password() {
 		return getPreferenceStore().getString(P_PASSWORD);
+	}
+	
+	@Override
+	public String pathAnnotation() {
+		return getPreferenceStore().getString(P_PATH_ANNOTATION);
+	}
+
+	@Override
+	public String requireLabel() {
+		return getPreferenceStore().getString(P_REQUIRE_LABEL);
 	}
 	
 }

@@ -23,11 +23,11 @@ import org.openjdk.jmc.ui.misc.PasswordFieldEditor;
  * preferences can be accessed directly via the preference store.
  */
 
-public class JmcKubernetesPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage implements IWorkbenchPreferencePage, PreferenceConstants {
 	
 	private Map<FieldEditor, Object> dependantControls=new WeakHashMap<>();
 
-	public JmcKubernetesPreferences() {
+	public JmcKubernetesPreferenceForm() {
 		super(GRID);
 		setPreferenceStore(JmcKubernetesPlugin.getDefault().getPreferenceStore());
 		setDescription("Options for scanning kubernetes cluster for JVMs to connect to");
@@ -39,7 +39,7 @@ public class JmcKubernetesPreferences extends FieldEditorPreferencePage implemen
 	 * knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		BooleanFieldEditor mainEnabler = new BooleanFieldEditor(PreferenceConstants.P_SCAN_FOR_INSTANCES, "&Scan for instances in cluster",
+		BooleanFieldEditor mainEnabler = new BooleanFieldEditor(P_SCAN_FOR_INSTANCES, "&Scan for instances in cluster",
 				getFieldEditorParent()) {
 			@Override
 			protected void valueChanged(boolean oldValue, boolean newValue) {
@@ -49,12 +49,13 @@ public class JmcKubernetesPreferences extends FieldEditorPreferencePage implemen
 		};
 		addField(mainEnabler);
 
-		this.addDependantField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_ALL_CONTEXTS, "Scan all &contexts in cluster",
+		this.addDependantField(new BooleanFieldEditor(P_SCAN_ALL_CONTEXTS, "Scan all &contexts in cluster",
 						getFieldEditorParent()));
-		this.addDependantField(new StringFieldEditor(PreferenceConstants.P_PATH_LABEL, "Path in &label", getFieldEditorParent()));
-		this.addDependantField(new StringFieldEditor(PreferenceConstants.P_USE_PORT, "Use a dedicated &port named", getFieldEditorParent()));
-		this.addDependantField(new StringFieldEditor(PreferenceConstants.P_USERNAME, "Require &username", getFieldEditorParent()));
-		this.addDependantField(new PasswordFieldEditor(PreferenceConstants.P_PASSWORD, "Require pass&word", getFieldEditorParent()));
+		this.addDependantField(new StringFieldEditor(P_REQUIRE_LABEL, "Require &label to scan pod", getFieldEditorParent()));
+		this.addDependantField(new StringFieldEditor(P_PATH_ANNOTATION, "Take &path from annotation", getFieldEditorParent()));
+		this.addDependantField(new StringFieldEditor(P_PORT_ANNOTATION, "&Take port from annotation", getFieldEditorParent()));
+		this.addDependantField(new StringFieldEditor(P_USERNAME, "Require &username", getFieldEditorParent()));
+		this.addDependantField(new PasswordFieldEditor(P_PASSWORD, "Require pass&word", getFieldEditorParent()));
 		//set initial enablement
 		enableDependantFields(JmcKubernetesPlugin.getDefault().scanForInstances());
 

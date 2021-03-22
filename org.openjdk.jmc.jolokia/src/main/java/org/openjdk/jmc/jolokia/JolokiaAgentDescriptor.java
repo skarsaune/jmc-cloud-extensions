@@ -1,10 +1,12 @@
 package org.openjdk.jmc.jolokia;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Map;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -15,15 +17,12 @@ import javax.management.remote.JMXServiceURL;
 
 import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
 import org.json.simple.JSONObject;
-import org.openjdk.jmc.common.IDescribable;
-import org.openjdk.jmc.rjmx.IServerDescriptor;
-import org.openjdk.jmc.rjmx.internal.JMXConnectionDescriptor;
 import org.openjdk.jmc.ui.common.jvm.Connectable;
 import org.openjdk.jmc.ui.common.jvm.JVMArch;
 import org.openjdk.jmc.ui.common.jvm.JVMDescriptor;
 import org.openjdk.jmc.ui.common.jvm.JVMType;
 
-class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
+public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
 	public static final JVMDescriptor NULL_DESCRIPTOR = new JVMDescriptor(null, null, null, null, null, null, false,
 			Connectable.UNKNOWN);
@@ -31,7 +30,7 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 	private final JSONObject agentData;
 	private final JVMDescriptor jvmDescriptor;
 
-	JolokiaAgentDescriptor(JSONObject agentData, JVMDescriptor jvmDescriptor)
+	public JolokiaAgentDescriptor(JSONObject agentData, JVMDescriptor jvmDescriptor)
 			throws URISyntaxException, MalformedURLException {
 		super();
 		URI uri = new URI((String) agentData.get("url"));
@@ -41,42 +40,18 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 		this.jvmDescriptor = jvmDescriptor;
 	}
 
-	@Override
-	public String getName() {
-		return String.valueOf(agentData.get("agent_id"));
-	}
-
-	@Override
-	public String getDescription() {
-		StringBuilder builder = new StringBuilder();
-		if (agentData.containsKey("server_vendor")) {
-			builder.append(agentData.get("server_vendor")).append(' ');
-		}
-		if (agentData.containsKey("server_product")) {
-			builder.append(agentData.get("server_product")).append(' ');
-		}
-		if (agentData.containsKey("server_version")) {
-			builder.append(agentData.get("server_version"));
-		}
-		return builder.toString();
-	}
-
-	JMXConnectionDescriptor getDescriptor() {
-		return new JMXConnectionDescriptor(this.getServiceUrl(), null);
-	}
-
 	JMXServiceURL getServiceUrl() {
 		return serviceUrl;
 	}
 
 	@Override
 	public String getGUID() {
-		return getName();
+		return String.valueOf(agentData.get("agent_id"));
 	}
 
 	@Override
 	public String getDisplayName() {
-		return getDescription();
+		return String.valueOf(agentData.get("agent_id"));
 	}
 
 	@Override
@@ -99,7 +74,6 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 			String javaVersion = null;
 			boolean isDebug = false;
 			JVMType type = JVMType.UNKNOWN;
-			Connectable connectable = Connectable.UNKNOWN;
 			JVMArch arch = JVMArch.UNKNOWN;
 			for (Attribute attribute : attributes.asList()) {
 				// newer JVM have pid as separate attribute, older have to parse from name
@@ -152,7 +126,6 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 						} else if(key.equalsIgnoreCase("java.version")) {
 							javaVersion = value;
 						}
-
 					}
 
 				}
@@ -165,6 +138,26 @@ class JolokiaAgentDescriptor implements IDescribable, IServerDescriptor {
 		}
 
 		return NULL_DESCRIPTOR;
+	}
+
+	@Override
+	public JMXServiceURL createJMXServiceURL() throws IOException {
+		return serviceUrl;
+	}
+
+	@Override
+	public Map<String, Object> getEnvironment() {
+		return null;
+	}
+
+	@Override
+	public String getPath() {
+		return "jolokia";
+	}
+
+	@Override
+	public JMXServiceURL serviceUrl() {
+		return this.serviceUrl;
 	}
 
 }

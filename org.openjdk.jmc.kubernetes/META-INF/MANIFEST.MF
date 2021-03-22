@@ -42,7 +42,8 @@ Bundle-ClassPath: target/dependency/client-java-5.0.0.jar,
  .,
  target/dependency/okhttp-2.7.5.jar
 Export-Package: org.openjdk.jmc.kubernetes
-Import-Package: org.apache.commons.logging;version="1.2.0",
+Import-Package: com.oracle.jmc.rjmx.internal,
+ org.apache.commons.logging;version="1.2.0",
  org.openjdk.jmc.rjmx,
  org.openjdk.jmc.rjmx.descriptorprovider
 Bundle-Activator: org.openjdk.jmc.kubernetes.JmcKubernetesPlugin
