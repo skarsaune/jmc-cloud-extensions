@@ -7,7 +7,7 @@ import org.openjdk.jmc.kubernetes.JmcKubernetesPlugin;
 /**
  * Class used to initialize default preference values.
  */
-public class PreferenceInitializer extends AbstractPreferenceInitializer {
+public class PreferenceInitializer extends AbstractPreferenceInitializer implements PreferenceConstants {
 
 	/*
 	 * (non-Javadoc)
@@ -16,9 +16,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JmcKubernetesPlugin.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_SCAN_FOR_INSTANCES, false);
-		store.setDefault(PreferenceConstants.P_SCAN_ALL_CONTEXTS, false);
-
+		store.setDefault(P_SCAN_FOR_INSTANCES, false);
+		store.setDefault(P_SCAN_ALL_CONTEXTS, false);
+		store.setDefault(P_REQUIRE_LABEL, "jolokia");
+		store.setDefault(P_JOLOKIA_PATH, "/jolokia/");
+		store.setDefault(P_JOLOKIA_PORT, "8778");
 	}
 
 }

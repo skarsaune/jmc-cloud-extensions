@@ -12,7 +12,7 @@ public class JmcKubernetesJmxConnectionProvider implements JMXConnectorProvider 
 	@Override
 	public JMXConnector newJMXConnector(JMXServiceURL serviceURL, Map<String, ?> environment) throws IOException {
         if(!"kubernetes".equals(serviceURL.getProtocol())) {
-            throw new MalformedURLException("I only serve Jolokia connections");
+            throw new MalformedURLException("I only serve Kubernetes connections");
         }
         return new JmcKubernetesJmxConnector(serviceURL, environment);
 	}

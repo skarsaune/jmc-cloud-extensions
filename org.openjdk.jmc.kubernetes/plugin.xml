@@ -11,10 +11,10 @@
       <extension
             point="org.eclipse.ui.preferencePages">
          <page
-               category="com.oracle.jmc.browser.preferences.BrowserPreferencePage"
+               category="org.openjdk.jmc.browser.preferences.BrowserPreferencePage"
                class="org.openjdk.jmc.kubernetes.preferences.JmcKubernetesPreferenceForm"
                id="org.openjdk.jmc.kubernetes.preferences.JmcKubernetesPreferences"
-               name="Kubernetes connections">
+               name="Kubernetes">
          </page>
       </extension>
       <extension
@@ -29,4 +29,14 @@
             class="org.openjdk.jmc.kubernetes.KubernetesDiscoveryListener">
       </provider>
    </extension>
+      <extension
+            point="org.eclipse.help.toc">
+         <toc
+               file="toc.xml">
+         </toc>
+         <toc
+               file="testToc.xml"
+               primary="true">
+         </toc>
+      </extension>
 </plugin>

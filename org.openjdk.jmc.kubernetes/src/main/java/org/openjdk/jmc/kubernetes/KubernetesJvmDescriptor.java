@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.management.remote.JMXServiceURL;
 
+import org.jolokia.kubernetes.client.KubernetesJmxConnector;
 import org.openjdk.jmc.jolokia.ServerConnectionDescriptor;
 import org.openjdk.jmc.ui.common.jvm.JVMDescriptor;
 
@@ -41,7 +42,12 @@ public class KubernetesJvmDescriptor implements ServerConnectionDescriptor {
 
 
 	public String getPath() {
-		return metadata.getClusterName()+"/"+metadata.getNamespace();
+		String namespace = metadata.getNamespace();
+		final Object context=this.env.get(KubernetesJmxConnector.KUBERNETES_CLIENT_CONTEXT);
+		if(context!=null) {
+			return context + "/" + namespace;
+		}
+		return namespace;
 	}
 
 

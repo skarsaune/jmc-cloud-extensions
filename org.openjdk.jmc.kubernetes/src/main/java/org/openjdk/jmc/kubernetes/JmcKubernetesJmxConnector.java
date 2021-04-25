@@ -8,7 +8,6 @@ import javax.management.remote.JMXServiceURL;
 import org.jolokia.client.J4pClient;
 import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
 import org.jolokia.kubernetes.client.KubernetesJmxConnector;
-import org.openjdk.jmc.jolokia.JmcJolokiaJmxConnection;
 
 public class JmcKubernetesJmxConnector extends KubernetesJmxConnector {
 

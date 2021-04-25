@@ -47,7 +47,7 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 
 	@Override
 	public String portAnnotation() {
-		return getPreferenceStore().getString(P_PORT_ANNOTATION);
+		return getPreferenceStore().getString(P_JOLOKIA_PORT);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 	
 	@Override
 	public String pathAnnotation() {
-		return getPreferenceStore().getString(P_PATH_ANNOTATION);
+		return getPreferenceStore().getString(P_JOLOKIA_PATH);
 	}
 
 	@Override
