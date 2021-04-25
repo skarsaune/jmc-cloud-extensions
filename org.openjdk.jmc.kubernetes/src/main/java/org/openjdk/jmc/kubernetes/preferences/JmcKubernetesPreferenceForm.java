@@ -31,7 +31,7 @@ public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage
 	public JmcKubernetesPreferenceForm() {
 		super(GRID);
 		setPreferenceStore(JmcKubernetesPlugin.getDefault().getPreferenceStore());
-		setDescription("Options that allows you to scan kubernetes for JVMs running Jolokia\n\n");
+		setDescription(Messages.JmcKubernetesPreferenceForm_FormDescription);
 	}
 
 	/**
@@ -40,8 +40,8 @@ public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage
 	 * knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		BooleanFieldEditor mainEnabler = new BooleanFieldEditor(P_SCAN_FOR_INSTANCES, "&Scan for kubernetes pods with Jolokia support",
-				getFieldEditorParent()) {
+		BooleanFieldEditor mainEnabler = new BooleanFieldEditor(P_SCAN_FOR_INSTANCES,
+				Messages.JmcKubernetesPreferenceForm_ScanForPods, getFieldEditorParent()) {
 			@Override
 			protected void valueChanged(boolean oldValue, boolean newValue) {
 				super.valueChanged(oldValue, newValue);
@@ -50,17 +50,24 @@ public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage
 		};
 		addField(mainEnabler);
 
-		this.addDependantField(new BooleanFieldEditor(P_SCAN_ALL_CONTEXTS, "Scan pods from all locally configured &contexts, if false: only scan the current contexts",
-						getFieldEditorParent()));
-		this.addTextField(new StringFieldEditor(P_REQUIRE_LABEL, "Require &label to scan pod", getFieldEditorParent()), "Only attempt to connect to pods with this label set, leave empty to scal all pods");
-		this.addTextField(new StringFieldEditor(P_JOLOKIA_PORT, "Jolokia &path in pods", getFieldEditorParent()), "Use this path for jolokia, or specify ${kubernetes/attribute/attributeName} to be able to specify per pod");
-		this.addTextField(new StringFieldEditor(P_JOLOKIA_PORT, "Jolokia p&ort in pods", getFieldEditorParent()), "Port to use, leave empty to use default port of Kubernetes proxy, alternatively ${kubernetes/attribute/attributeName} to be able to specify per pod" );
-		this.addTextField(new StringFieldEditor(P_USERNAME, "Require &username", getFieldEditorParent()), "Username , alternatively use ${kubernetes/secret/secretName/secretItem} where the secret is in the same namespace as the pod and the type is either kubernetes.io/basic-auth or Opaque with java.util.Properties compatible values");
-		PasswordFieldEditor passwordField = new PasswordFieldEditor(P_PASSWORD, "Require pass&word", getFieldEditorParent());
-		String passwordTooltip = "Password , alternatively use ${kubernetes/secret/secretName/secretItem} where the secret is in the same namespace as the pod and the type is either kubernetes.io/basic-auth or Opaque with java.util.Properties compatible values";
+		this.addDependantField(new BooleanFieldEditor(P_SCAN_ALL_CONTEXTS,
+				Messages.JmcKubernetesPreferenceForm_AllContexts, getFieldEditorParent()));
+		this.addTextField(new StringFieldEditor(P_REQUIRE_LABEL, Messages.JmcKubernetesPreferenceForm_RequireLabel,
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_LabelToolTip);
+		this.addTextField(new StringFieldEditor(P_JOLOKIA_PATH, Messages.JmcKubernetesPreferenceForm_PathLabel,
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_PathTooltip);
+		this.addTextField(new StringFieldEditor(P_JOLOKIA_PORT, Messages.JmcKubernetesPreferenceForm_PortLabel,
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_PortTooltip);
+		this.addTextField(new StringFieldEditor(P_JOLOKIA_PROTOCOL, Messages.JmcKubernetesPreferenceForm_ProtocolLabel,
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_ProtocolTooltip);
+		this.addTextField(new StringFieldEditor(P_USERNAME, Messages.JmcKubernetesPreferenceForm_UsernameLabel,
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_UesrnameTooltip);
+		PasswordFieldEditor passwordField = new PasswordFieldEditor(P_PASSWORD,
+				Messages.JmcKubernetesPreferenceForm_PasswordLabel, getFieldEditorParent());
+		String passwordTooltip = Messages.JmcKubernetesPreferenceForm_PasswordTooltip;
 		passwordField.getTextControl(getFieldEditorParent()).setToolTipText(passwordTooltip);
 		this.addDependantField(passwordField);
-		//set initial enablement
+		// set initial enablement
 		enableDependantFields(JmcKubernetesPlugin.getDefault().scanForInstances());
 
 	}
@@ -69,7 +76,6 @@ public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage
 		this.addDependantField(field);
 		field.getTextControl(getFieldEditorParent()).setToolTipText(tooltip);
 		field.getLabelControl(getFieldEditorParent()).setToolTipText(tooltip);
-
 
 	}
 

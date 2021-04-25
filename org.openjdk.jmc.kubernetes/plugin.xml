@@ -14,7 +14,7 @@
                category="org.openjdk.jmc.browser.preferences.BrowserPreferencePage"
                class="org.openjdk.jmc.kubernetes.preferences.JmcKubernetesPreferenceForm"
                id="org.openjdk.jmc.kubernetes.preferences.JmcKubernetesPreferences"
-               name="Kubernetes">
+               name="%page.name">
          </page>
       </extension>
       <extension

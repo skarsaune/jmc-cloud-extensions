@@ -3,9 +3,10 @@ package org.openjdk.jmc.kubernetes.preferences;
 public interface KubernetesScanningParameters {
 	boolean scanForInstances();
 	boolean scanAllContexts();
-	String portAnnotation();
+	String jolokiaPort();
 	String username();
 	String password();
-	String pathAnnotation();
+	String jolokiaPath();
+	String jolokiaProtocol();
 	String requireLabel();
 }

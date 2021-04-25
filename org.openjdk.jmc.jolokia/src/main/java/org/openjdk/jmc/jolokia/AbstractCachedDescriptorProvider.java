@@ -21,12 +21,6 @@ public abstract class AbstractCachedDescriptorProvider extends AbstractDescripto
 	 */
 	private final Map<String, ServerConnectionDescriptor> knownDescriptors = new HashMap<>();
 
-	public String getName() {
-		return getClass().getSimpleName();
-	}
-
-	public abstract String getDescription();
-
 	/**
 	 * This is where we periodically scan and report deltas to
 	 * the listeners.

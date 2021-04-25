@@ -45,7 +45,7 @@ public class KubernetesJvmDescriptor implements ServerConnectionDescriptor {
 		String namespace = metadata.getNamespace();
 		final Object context=this.env.get(KubernetesJmxConnector.KUBERNETES_CLIENT_CONTEXT);
 		if(context!=null) {
-			return context + "/" + namespace;
+			return context + "/" + namespace; //$NON-NLS-1$
 		}
 		return namespace;
 	}

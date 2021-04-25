@@ -5,13 +5,14 @@ package org.openjdk.jmc.kubernetes.preferences;
  */
 public interface PreferenceConstants {
 
-	public static final String P_SCAN_FOR_INSTANCES = "scanForInstances";
-	public static final String P_SCAN_ALL_CONTEXTS = "scanAllContexts";
-	public static final String P_REQUIRE_LABEL = "requireLabel";
-	public static final String P_JOLOKIA_PATH = "jolokiaPath";
-	public static final String P_JOLOKIA_PORT = "jolokiaPort";
-	public static final String P_USERNAME = "username";
-	public static final String P_PASSWORD = "password";
+	public static final String P_SCAN_FOR_INSTANCES = "scanForInstances"; //$NON-NLS-1$
+	public static final String P_SCAN_ALL_CONTEXTS = "scanAllContexts"; //$NON-NLS-1$
+	public static final String P_REQUIRE_LABEL = "requireLabel"; //$NON-NLS-1$
+	public static final String P_JOLOKIA_PATH = "jolokiaPath"; //$NON-NLS-1$
+	public static final String P_JOLOKIA_PORT = "jolokiaPort"; //$NON-NLS-1$
+	public static final String P_JOLOKIA_PROTOCOL = "jolokiaProtocol"; //$NON-NLS-1$
+	public static final String P_USERNAME = "username"; //$NON-NLS-1$
+	public static final String P_PASSWORD = "password"; //$NON-NLS-1$
 
 	
 }

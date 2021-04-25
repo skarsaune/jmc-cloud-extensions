@@ -46,7 +46,7 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 	}
 
 	@Override
-	public String portAnnotation() {
+	public String jolokiaPort() {
 		return getPreferenceStore().getString(P_JOLOKIA_PORT);
 	}
 
@@ -61,13 +61,18 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 	}
 	
 	@Override
-	public String pathAnnotation() {
+	public String jolokiaPath() {
 		return getPreferenceStore().getString(P_JOLOKIA_PATH);
 	}
 
 	@Override
 	public String requireLabel() {
 		return getPreferenceStore().getString(P_REQUIRE_LABEL);
+	}
+
+	@Override
+	public String jolokiaProtocol() {
+		return getPreferenceStore().getString(P_JOLOKIA_PROTOCOL);
 	}
 	
 }

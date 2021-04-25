@@ -18,9 +18,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer impleme
 		IPreferenceStore store = JmcKubernetesPlugin.getDefault().getPreferenceStore();
 		store.setDefault(P_SCAN_FOR_INSTANCES, false);
 		store.setDefault(P_SCAN_ALL_CONTEXTS, false);
-		store.setDefault(P_REQUIRE_LABEL, "jolokia");
-		store.setDefault(P_JOLOKIA_PATH, "/jolokia/");
-		store.setDefault(P_JOLOKIA_PORT, "8778");
+		store.setDefault(P_REQUIRE_LABEL, "jolokia"); //$NON-NLS-1$
+		store.setDefault(P_JOLOKIA_PATH, "/jolokia/"); //$NON-NLS-1$
+		store.setDefault(P_JOLOKIA_PORT, "8778"); //$NON-NLS-1$
 	}
 
 }
