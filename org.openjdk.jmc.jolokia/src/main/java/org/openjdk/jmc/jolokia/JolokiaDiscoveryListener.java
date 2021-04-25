@@ -43,6 +43,11 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider {
 	public String getDescription() {
 		return "Uses Jolokia Discovery to report any active JVMs with Jolokia broadcasting";
 	}
+	
+	@Override
+	public String getName() {
+		return "jolokia";
+	}
 
 	@Override
 	protected boolean isEnabled() {

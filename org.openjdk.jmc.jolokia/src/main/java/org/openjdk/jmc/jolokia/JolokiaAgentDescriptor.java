@@ -24,7 +24,7 @@ import org.openjdk.jmc.ui.common.jvm.JVMType;
 
 public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
-	public static final JVMDescriptor NULL_DESCRIPTOR = new JVMDescriptor(null, null, null, null, null, null, false,
+	public static final JVMDescriptor NULL_DESCRIPTOR = new JVMDescriptor(null, null, null,null, null, null, null, null, false,
 			Connectable.UNKNOWN);
 	private final JMXServiceURL serviceUrl;
 	private final JSONObject agentData;
@@ -69,9 +69,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 			AttributeList attributes = adapter.getAttributes(new ObjectName(ManagementFactory.RUNTIME_MXBEAN_NAME),
 					new String[] { "Pid", "Name", "InputArguments", "SystemProperties" });
 			Integer pid = null;
-			String arguments = null;
-			String javaCommand = null;
-			String javaVersion = null;
+			String arguments=null, javaCommand=null, javaVersion=null, vmName=null, vmVendor = null;
 			boolean isDebug = false;
 			JVMType type = JVMType.UNKNOWN;
 			JVMArch arch = JVMArch.UNKNOWN;
@@ -105,7 +103,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 						&& attribute.getValue() instanceof TabularDataSupport) {
 					TabularDataSupport systemProperties = (TabularDataSupport) attribute.getValue();
 
-					// iterate over properties as we need to use the exact key, which is non trivial
+					// quite clumsy: iterate over properties as we need to use the exact key, which is non trivial
 					// to reproduce
 					for (Object entry : systemProperties.values()) {
 						String key = ((CompositeDataSupport) entry).get("key").toString();
@@ -125,13 +123,17 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 							javaCommand = value;
 						} else if(key.equalsIgnoreCase("java.version")) {
 							javaVersion = value;
+						} else if (key.equalsIgnoreCase("java.vm.name")) {
+							vmName=value;
+						} else if(key.equalsIgnoreCase("java.vm.vendor")) {
+							vmVendor=value;
 						}
 					}
 
 				}
 
 			}
-			return new JVMDescriptor(javaVersion, type, arch, javaCommand, arguments, pid, isDebug,
+			return new JVMDescriptor(javaVersion, type, arch, javaCommand, arguments, vmName, vmVendor, pid, isDebug,
 					Connectable.ATTACHABLE);
 
 		} catch (Exception ignore) {
@@ -152,7 +154,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
 	@Override
 	public String getPath() {
-		return "jolokia";
+		return null;
 	}
 
 	@Override
