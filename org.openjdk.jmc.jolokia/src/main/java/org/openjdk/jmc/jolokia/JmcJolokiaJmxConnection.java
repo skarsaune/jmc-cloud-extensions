@@ -33,7 +33,7 @@ import org.jolokia.converter.json.JsonConvertOptions;
  */
 public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 
-	private static final String UNKNOWN = "Unknown";
+	private static final String UNKNOWN = "Unknown"; //$NON-NLS-1$
 	private static final String DIAGNOSTIC_OPTIONS = "com.sun.management:type=DiagnosticCommand"; //$NON-NLS-1$
 	private static final String PREFIX = "dcmd."; //$NON-NLS-1$
 	private static final String IMPACT = PREFIX + "vmImpact"; //$NON-NLS-1$
@@ -145,11 +145,11 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 	private Descriptor buildArgument(MBeanParameterInfo parameter) {
 		DescriptorSupport result = new DescriptorSupport();
 		result.setField(ARGUMENT_NAME, parameter.getName());
-		boolean isMultiple = parameter.getType().startsWith("[");
+		boolean isMultiple = parameter.getType().startsWith("["); //$NON-NLS-1$
 		result.setField(ARGUMENT_MULITPLE, String.valueOf(isMultiple));
 		String type = parameter.getType();
 		if (isMultiple) {
-			if (type.startsWith("[L")) {
+			if (type.startsWith("[L")) { //$NON-NLS-1$
 				type = type.substring(2);
 			} else {
 				type = type.substring(1);
@@ -160,8 +160,8 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 		// sufficient
 		result.setField(ARGUMENT_TYPE, parameter.getType());
 		result.setField(ARGUMENT_DESCRIPTION, parameter.getDescription());
-		result.setField(ARGUMENT_MANDATORY, "false");
-		result.setField(ARGUMENT_OPTION, "false");
+		result.setField(ARGUMENT_MANDATORY, "false"); //$NON-NLS-1$
+		result.setField(ARGUMENT_OPTION, "false"); //$NON-NLS-1$
 		return result;
 	}
 

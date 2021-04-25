@@ -1,11 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jolokia JMC Connection
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openjdk.jmc.jolokia;singleton:=true
 Bundle-Version: 7.1.0.qualifier
 Automatic-Module-Name: org.openjdk.jmc.jolokia
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.openjdk.jmc.rjmx;bundle-version="7.1.0"
+Require-Bundle: org.openjdk.jmc.rjmx;bundle-version="8.1.0",
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.openjdk.jmc.ui;bundle-version="8.1.0"
 Export-Package: org.apache.http.client,
  org.jolokia.client,
  org.jolokia.client.jmxadapter,
@@ -28,3 +31,5 @@ Bundle-ClassPath: target/dependency/jolokia-client-java-1.6.3-SNAPSHOT.jar,
  target/dependency/httpcore-4.4.7.jar,
  target/dependency/commons-logging-1.1.1.jar
 Import-Package: org.openjdk.jmc.rjmx.descriptorprovider
+Bundle-Activator: org.openjdk.jmc.jolokia.JmcJolokiaPlugin
+Bundle-ActivationPolicy: lazy

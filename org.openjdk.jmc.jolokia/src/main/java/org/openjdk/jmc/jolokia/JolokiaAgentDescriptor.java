@@ -33,9 +33,9 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 	public JolokiaAgentDescriptor(JSONObject agentData, JVMDescriptor jvmDescriptor)
 			throws URISyntaxException, MalformedURLException {
 		super();
-		URI uri = new URI((String) agentData.get("url"));
+		URI uri = new URI((String) agentData.get("url")); //$NON-NLS-1$
 		this.serviceUrl = new JMXServiceURL(
-				String.format("service:jmx:jolokia://%s:%s%s", uri.getHost(), uri.getPort(), uri.getPath()));
+				String.format("service:jmx:jolokia://%s:%s%s", uri.getHost(), uri.getPort(), uri.getPath())); //$NON-NLS-1$
 		this.agentData = agentData;
 		this.jvmDescriptor = jvmDescriptor;
 	}
@@ -46,12 +46,12 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
 	@Override
 	public String getGUID() {
-		return String.valueOf(agentData.get("agent_id"));
+		return String.valueOf(agentData.get("agent_id")); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getDisplayName() {
-		return String.valueOf(agentData.get("agent_id"));
+		return String.valueOf(agentData.get("agent_id")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
 		try {
 			AttributeList attributes = adapter.getAttributes(new ObjectName(ManagementFactory.RUNTIME_MXBEAN_NAME),
-					new String[] { "Pid", "Name", "InputArguments", "SystemProperties" });
+					new String[] { "Pid", "Name", "InputArguments", "SystemProperties" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			Integer pid = null;
 			String arguments=null, javaCommand=null, javaVersion=null, vmName=null, vmVendor = null;
 			boolean isDebug = false;
@@ -75,12 +75,12 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 			JVMArch arch = JVMArch.UNKNOWN;
 			for (Attribute attribute : attributes.asList()) {
 				// newer JVM have pid as separate attribute, older have to parse from name
-				if (attribute.getName().equalsIgnoreCase("Pid")) {
+				if (attribute.getName().equalsIgnoreCase("Pid")) { //$NON-NLS-1$
 					try {
 						pid = Integer.valueOf(String.valueOf(attribute.getValue()));
 					} catch (NumberFormatException ignore) {
 					}
-				} else if (attribute.getName().equalsIgnoreCase("Name") && pid == null) {
+				} else if (attribute.getName().equalsIgnoreCase("Name") && pid == null) { //$NON-NLS-1$
 					String pidAndHost = String.valueOf(attribute.getValue());
 					int separator = pidAndHost.indexOf('@');
 					if (separator > 0) {
@@ -89,43 +89,43 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 						} catch (NumberFormatException e) {
 						}
 					}
-				} else if (attribute.getName().equalsIgnoreCase("InputArguments")) {
+				} else if (attribute.getName().equalsIgnoreCase("InputArguments")) { //$NON-NLS-1$
 
 					if (attribute.getValue() instanceof String[]) {
 						arguments = Arrays.toString((String[]) attribute.getValue());
 					} else {
 						arguments = String.valueOf(attribute.getValue());
 					}
-					if (arguments.contains("-agentlib:jdwp")) {
+					if (arguments.contains("-agentlib:jdwp")) { //$NON-NLS-1$
 						isDebug = true;
 					}
-				} else if (attribute.getName().equalsIgnoreCase("SystemProperties")
+				} else if (attribute.getName().equalsIgnoreCase("SystemProperties") //$NON-NLS-1$
 						&& attribute.getValue() instanceof TabularDataSupport) {
 					TabularDataSupport systemProperties = (TabularDataSupport) attribute.getValue();
 
 					// quite clumsy: iterate over properties as we need to use the exact key, which is non trivial
 					// to reproduce
 					for (Object entry : systemProperties.values()) {
-						String key = ((CompositeDataSupport) entry).get("key").toString();
-						String value = ((CompositeDataSupport) entry).get("value").toString();
-						if (key.equalsIgnoreCase("sun.management.compiler")) {
-							if (value.toLowerCase().contains("hotspot")) {
+						String key = ((CompositeDataSupport) entry).get("key").toString(); //$NON-NLS-1$
+						String value = ((CompositeDataSupport) entry).get("value").toString(); //$NON-NLS-1$
+						if (key.equalsIgnoreCase("sun.management.compiler")) { //$NON-NLS-1$
+							if (value.toLowerCase().contains("hotspot")) { //$NON-NLS-1$
 								type = JVMType.HOTSPOT;
 							}
-						} else if (key.equalsIgnoreCase("sun.arch.data.model")) {
+						} else if (key.equalsIgnoreCase("sun.arch.data.model")) { //$NON-NLS-1$
 							String archIndicator = value;
-							if (archIndicator.contains("64")) {
+							if (archIndicator.contains("64")) { //$NON-NLS-1$
 								arch = JVMArch.BIT64;
-							} else if (archIndicator.contains("32")) {
+							} else if (archIndicator.contains("32")) { //$NON-NLS-1$
 								arch = JVMArch.BIT32;
 							}
-						} else if (key.equalsIgnoreCase("sun.java.command")) {
+						} else if (key.equalsIgnoreCase("sun.java.command")) { //$NON-NLS-1$
 							javaCommand = value;
-						} else if(key.equalsIgnoreCase("java.version")) {
+						} else if(key.equalsIgnoreCase("java.version")) { //$NON-NLS-1$
 							javaVersion = value;
-						} else if (key.equalsIgnoreCase("java.vm.name")) {
+						} else if (key.equalsIgnoreCase("java.vm.name")) { //$NON-NLS-1$
 							vmName=value;
-						} else if(key.equalsIgnoreCase("java.vm.vendor")) {
+						} else if(key.equalsIgnoreCase("java.vm.vendor")) { //$NON-NLS-1$
 							vmVendor=value;
 						}
 					}
