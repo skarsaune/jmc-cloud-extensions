@@ -134,7 +134,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
 			}
 			return new JVMDescriptor(javaVersion, type, arch, javaCommand, arguments, vmName, vmVendor, pid, isDebug,
-					Connectable.ATTACHABLE);
+					Connectable.UNKNOWN);
 
 		} catch (Exception ignore) {
 		}
