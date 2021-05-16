@@ -38,18 +38,25 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.dsl.ContainerResource;
+import io.fabric8.kubernetes.client.dsl.ExecListener;
+import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import io.fabric8.kubernetes.client.dsl.FilterWatchListMultiDeletable;
+import io.fabric8.kubernetes.client.dsl.LogWatch;
+import io.fabric8.kubernetes.client.dsl.PodResource;
 import io.fabric8.kubernetes.client.internal.KubeConfigUtils;
 import io.fabric8.kubernetes.client.utils.Utils;
+import okhttp3.Response;
 
 public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvider {
 
-	private final Pattern SECRET_PATTERN = Pattern
-			.compile(Messages.KubernetesDiscoveryListener_0);
+	private final Pattern SECRET_PATTERN = Pattern.compile(Messages.KubernetesDiscoveryListener_0);
 	private final Pattern ATTRIBUTE_PATTERN = Pattern.compile("\\$\\{kubernetes/annotation/(?<annotationName>[^/]+)}"); //$NON-NLS-1$
 	private final Set<String> VALID_JOLOKIA_PROTOCOLS = new HashSet<>(Arrays.asList("http", "https")); //$NON-NLS-1$ //$NON-NLS-2$
+
 	public final String getDescription() {
 		return Messages.KubernetesDiscoveryListener_Description;
 	}
@@ -64,15 +71,20 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 	}
 
 	private List<String> contexts;
+	private long contextsCached=0L;
 
 	private List<String> allContexts() throws IOException {
-		if (contexts != null) {// the YAML parsing is soo incredibly sloow, hence cache context names for later
+		final String path = Utils.getSystemPropertyOrEnvVar(Config.KUBERNETES_KUBECONFIG_FILE,
+				new File(System.getProperty("user.home"), ".kube" + File.separator + "config").toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File configPath = new File(path);
+		if (contexts != null && contextsCached > configPath.lastModified()) {// the YAML parsing is soo incredibly sloow, hence cache context names for later
 								// runs
 			return contexts;
 		}
-		final String path = Utils.getSystemPropertyOrEnvVar(Config.KUBERNETES_KUBECONFIG_FILE,
-				new File(System.getProperty("user.home"), ".kube" + File.separator + "config").toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		io.fabric8.kubernetes.api.model.Config config = KubeConfigUtils.parseConfig(new File(path));
+		//reload config if kubeconfig has been modified since we cached the config
+		io.fabric8.kubernetes.api.model.Config config = KubeConfigUtils.parseConfig(configPath);
+		this.contextsCached=System.currentTimeMillis();
+		KubernetesJmxConnector.resetKubernetesConfig();
 		return contexts = config.getContexts().stream().map(NamedContext::getName).collect(Collectors.toList());
 	}
 
@@ -80,6 +92,9 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 	protected Map<String, ServerConnectionDescriptor> discoverJvms() {
 		Map<String, ServerConnectionDescriptor> found = new HashMap<>();
 		KubernetesScanningParameters parameters = JmcKubernetesPlugin.getDefault();
+		if(!isEnabled()) {
+			return found;
+		}
 		boolean hasScanned = false;
 
 		if (parameters.scanAllContexts()) {
@@ -89,7 +104,8 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 					scanContext(found, parameters, context);
 				}
 			} catch (IOException e) {
-				Platform.getLog(FrameworkUtil.getBundle(getClass())).error(Messages.KubernetesDiscoveryListener_UnableToFindContexts, e);
+				Platform.getLog(FrameworkUtil.getBundle(getClass()))
+						.error(Messages.KubernetesDiscoveryListener_UnableToFindContexts, e);
 			}
 		}
 		if (!hasScanned) {// scan default context
@@ -104,8 +120,8 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 		try {
 			scanContextUnsafe(found, parameters, context);
 		} catch (Exception e) {
-			Platform.getLog(FrameworkUtil.getBundle(getClass())).error(Messages.KubernetesDiscoveryListener_UnableToScan + context,
-					e);
+			Platform.getLog(FrameworkUtil.getBundle(getClass()))
+					.error(Messages.KubernetesDiscoveryListener_UnableToScan + context, e);
 		}
 		return found;
 	}
@@ -124,13 +140,15 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 		} else {
 			podList = query.list().getItems();
 		}
-		//can consider parallelization for big contexts, however since it is the background await the situation a bit 
+		// can consider parallelization for big contexts, however since it is the
+		// background await the situation a bit
 		podList.stream().forEach(pod -> scanPod(found, parameters, context, client, pod));
 		return found;
 	}
 
 	private void scanPod(Map<String, ServerConnectionDescriptor> found, KubernetesScanningParameters parameters,
 			String context, KubernetesClient client, Pod pod) {
+
 		final ObjectMeta metadata = pod.getMetadata();
 		HashMap<String, String> headers = new HashMap<>();
 		if (notEmpty(parameters.username())) {
@@ -148,8 +166,9 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 		final String protocol = getValueOrAttribute(parameters.jolokiaProtocol(), metadata);
 		final String podName = metadata.getName();
 		if (notEmpty(protocol)) {
-			if(!VALID_JOLOKIA_PROTOCOLS.contains(protocol)) {
-				throw new IllegalArgumentException(Messages.KubernetesDiscoveryListener_JolokiaProtocol + protocol + Messages.KubernetesDiscoveryListener_HttpOrHttps);
+			if (!VALID_JOLOKIA_PROTOCOLS.contains(protocol)) {
+				throw new IllegalArgumentException(Messages.KubernetesDiscoveryListener_JolokiaProtocol + protocol
+						+ Messages.KubernetesDiscoveryListener_HttpOrHttps);
 			}
 			// a bit clumsy, need to inject protocol _before_ podname in selflink
 			url.insert(url.lastIndexOf(podName), protocol + ":"); //$NON-NLS-1$
@@ -259,7 +278,8 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 			}
 
 		}
-		throw new NoSuchElementException(Messages.KubernetesDiscoveryListener_CouldNotFindSecret + secretName + Messages.KubernetesDiscoveryListener_InNamespace + namespace);
+		throw new NoSuchElementException(Messages.KubernetesDiscoveryListener_CouldNotFindSecret + secretName
+				+ Messages.KubernetesDiscoveryListener_InNamespace + namespace);
 
 	}
 

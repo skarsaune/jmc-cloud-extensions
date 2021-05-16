@@ -11,7 +11,8 @@ import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
 import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorProvider;
 
 @SuppressWarnings("restriction")
-public abstract class AbstractCachedDescriptorProvider extends AbstractDescriptorProvider implements IDescriptorProvider, IDescribable {
+public abstract class AbstractCachedDescriptorProvider extends AbstractDescriptorProvider
+		implements IDescriptorProvider, IDescribable {
 
 	private static final long LOCAL_REFRESH_INTERVAL = 20000;
 	private Scanner scanner;
@@ -22,8 +23,7 @@ public abstract class AbstractCachedDescriptorProvider extends AbstractDescripto
 	private final Map<String, ServerConnectionDescriptor> knownDescriptors = new HashMap<>();
 
 	/**
-	 * This is where we periodically scan and report deltas to
-	 * the listeners.
+	 * This is where we periodically scan and report deltas to the listeners.
 	 */
 	private class Scanner implements Runnable {
 		boolean isRunning;
@@ -33,9 +33,7 @@ public abstract class AbstractCachedDescriptorProvider extends AbstractDescripto
 			isRunning = true;
 			while (isRunning) {
 				try {
-					if(isEnabled()) {						
-						scan();
-					}
+					scan();
 					Thread.sleep(LOCAL_REFRESH_INTERVAL);
 				} catch (InterruptedException ignore) {
 					// Don't mind being interrupted.
@@ -70,7 +68,8 @@ public abstract class AbstractCachedDescriptorProvider extends AbstractDescripto
 					if (knownDescriptors.containsKey(entry.getKey())) {
 						continue;
 					}
-					onDescriptorDetected(entry.getValue(), entry.getValue().getPath(), entry.getValue().serviceUrl(), entry.getValue());
+					onDescriptorDetected(entry.getValue(), entry.getValue().getPath(), entry.getValue().serviceUrl(),
+							entry.getValue());
 				}
 				knownDescriptors.clear();
 				knownDescriptors.putAll(newOnes);
@@ -84,13 +83,13 @@ public abstract class AbstractCachedDescriptorProvider extends AbstractDescripto
 	private void initialize() {
 
 		scanner = new Scanner();
-		scannerThread = new Thread(scanner, getName()); //$NON-NLS-1$
+		scannerThread = new Thread(scanner, getName()); // $NON-NLS-1$
 		scannerThread.start();
 	}
 
 	protected abstract boolean isEnabled();
 
-	protected abstract Map<String, ServerConnectionDescriptor> discoverJvms(); 
+	protected abstract Map<String, ServerConnectionDescriptor> discoverJvms();
 
 	@Override
 	public void addDescriptorListener(IDescriptorListener l) {
