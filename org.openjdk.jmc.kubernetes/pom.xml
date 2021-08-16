@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openjdk.jmc</groupId>
 		<artifactId>missioncontrol.application</artifactId>
-		<version>7.1.0-SNAPSHOT</version>
+		<version>8.2.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.openjdk.jmc</groupId>
 	<artifactId>org.openjdk.jmc.kubernetes</artifactId>
@@ -33,34 +33,17 @@
 		<dependency>
 			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-jmx-adapter</artifactId>
-			<version>1.6.3-SNAPSHOT</version>
+			<version>1.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-kubernetes</artifactId>
-			<version>1.6.3-SNAPSHOT</version>
+			<version>1.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmc</groupId>
 			<artifactId>org.openjdk.jmc.rjmx</artifactId>
-			<version>7.1.0-SNAPSHOT</version>
-		</dependency>
-		<!-- for authentication in AKS -->
-		<dependency>
-			<groupId>com.microsoft.azure</groupId>
-			<artifactId>adal4j</artifactId>
-			<version>1.6.0</version>
-		</dependency>
-		<dependency><!-- the clients mostly use commons logging, hence allow the 
-				adal4j to log there -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jcl</artifactId>
-			<version>1.7.21</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.21</version>
+			<version>8.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
