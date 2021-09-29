@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Automatic-Module-Name: org.openjdk.jmc.jolokia
-Bundle-SymbolicName: org.openjdk.jmc.jolokia
-Bundle-Name: Jolokia JMC Connection
-Bundle-Version: 7.1.0.202003101936
-Require-Bundle: org.openjdk.jmc.rjmx;bundle-version="7.1.0"
-Bundle-ManifestVersion: 2
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-
