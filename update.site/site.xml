@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.jolokia.jmc.kubernetes_1.0.0.202109292118.jar" id="org.jolokia.jmc.kubernetes" version="1.0.0.202109292118">
+      <category name="jvm_monitoring"/>
+   </feature>
+   <feature url="features/org.jolokia.jmc.support_1.0.0.202109292118.jar" id="org.jolokia.jmc.support" version="1.0.0.202109292118">
+      <category name="jvm_monitoring"/>
+   </feature>
+   <category-def name="jvm_monitoring" label="JVM Monitoring"/>
+</site>

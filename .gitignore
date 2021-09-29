@@ -23,3 +23,5 @@
 hs_err_pid*
 /.metadata/
 org.eclipse.jmc.jolokia/.metadata/
+update.site/plugins/
+update.site/features/
