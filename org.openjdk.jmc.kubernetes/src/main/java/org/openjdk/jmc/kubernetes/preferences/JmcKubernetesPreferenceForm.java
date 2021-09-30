@@ -7,6 +7,10 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.openjdk.jmc.kubernetes.JmcKubernetesPlugin;
@@ -61,15 +65,26 @@ public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage
 		this.addTextField(new StringFieldEditor(P_JOLOKIA_PROTOCOL, Messages.JmcKubernetesPreferenceForm_ProtocolLabel,
 				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_ProtocolTooltip);
 		this.addTextField(new StringFieldEditor(P_USERNAME, Messages.JmcKubernetesPreferenceForm_UsernameLabel,
-				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_UesrnameTooltip);
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_UsernameTooltip);
 		PasswordFieldEditor passwordField = new PasswordFieldEditor(P_PASSWORD,
 				Messages.JmcKubernetesPreferenceForm_PasswordLabel, getFieldEditorParent());
 		String passwordTooltip = Messages.JmcKubernetesPreferenceForm_PasswordTooltip;
 		passwordField.getTextControl(getFieldEditorParent()).setToolTipText(passwordTooltip);
 		this.addDependantField(passwordField);
+		addSeparator();
+		this.addDependantField(new BooleanFieldEditor(P_OPTIMIZE_HEAP_DUMPS, Messages.JmcKubernetesPreferenceForm_DownloadHeapDumps, getFieldEditorParent()));
+		this.addTextField(new StringFieldEditor(P_TMP_HEAP_DUMP_PATH, Messages.JmcKubernetesPreferenceForm_HeapDumpFolder, getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_HeapDumpFolderTooltip);
 		// set initial enablement
 		enableDependantFields(JmcKubernetesPlugin.getDefault().scanForInstances());
 
+	}
+
+	private void addSeparator() {
+		GridData layoutData = new GridData(SWT.DEFAULT, SWT.DEFAULT);
+		layoutData.grabExcessHorizontalSpace=true;
+		layoutData.horizontalAlignment=SWT.FILL;
+		layoutData.horizontalSpan=((GridLayout)getFieldEditorParent().getLayout()).numColumns;
+		new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR).setLayoutData(layoutData);
 	}
 
 	private void addTextField(StringFieldEditor field, String tooltip) {

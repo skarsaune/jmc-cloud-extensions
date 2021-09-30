@@ -74,5 +74,15 @@ public class JmcKubernetesPlugin extends MCAbstractUIPlugin implements Kubernete
 	public String jolokiaProtocol() {
 		return getPreferenceStore().getString(P_JOLOKIA_PROTOCOL);
 	}
+
+	@Override
+	public boolean optimizeHeapDumps() {
+		return getPreferenceStore().getBoolean(P_OPTIMIZE_HEAP_DUMPS);
+	}
+
+	@Override
+	public String tmpHeapDumpPath() {
+		return getPreferenceStore().getString(P_TMP_HEAP_DUMP_PATH);
+	}
 	
 }

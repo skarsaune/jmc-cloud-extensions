@@ -21,6 +21,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer impleme
 		store.setDefault(P_REQUIRE_LABEL, "jolokia"); //$NON-NLS-1$
 		store.setDefault(P_JOLOKIA_PATH, "/jolokia/"); //$NON-NLS-1$
 		store.setDefault(P_JOLOKIA_PORT, "8778"); //$NON-NLS-1$
+		store.setDefault(P_OPTIMIZE_HEAP_DUMPS, true);
+		store.setDefault(P_TMP_HEAP_DUMP_PATH, "/tmp"); //$NON-NLS-1$
 	}
 
 }

@@ -5,7 +5,10 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.openjdk.jmc.kubernetes.preferences.messages"; //$NON-NLS-1$
 	public static String JmcKubernetesPreferenceForm_AllContexts;
+	public static String JmcKubernetesPreferenceForm_DownloadHeapDumps;
 	public static String JmcKubernetesPreferenceForm_FormDescription;
+	public static String JmcKubernetesPreferenceForm_HeapDumpFolder;
+	public static String JmcKubernetesPreferenceForm_HeapDumpFolderTooltip;
 	public static String JmcKubernetesPreferenceForm_LabelToolTip;
 	public static String JmcKubernetesPreferenceForm_PasswordLabel;
 	public static String JmcKubernetesPreferenceForm_PasswordTooltip;
@@ -17,7 +20,7 @@ public class Messages extends NLS {
 	public static String JmcKubernetesPreferenceForm_ProtocolTooltip;
 	public static String JmcKubernetesPreferenceForm_RequireLabel;
 	public static String JmcKubernetesPreferenceForm_ScanForPods;
-	public static String JmcKubernetesPreferenceForm_UesrnameTooltip;
+	public static String JmcKubernetesPreferenceForm_UsernameTooltip;
 	public static String JmcKubernetesPreferenceForm_UsernameLabel;
 	static {
 		// initialize resource bundle

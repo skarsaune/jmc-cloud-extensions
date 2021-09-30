@@ -9,6 +9,7 @@ import org.jolokia.client.jmxadapter.RemoteJmxAdapter;
 import org.jolokia.discovery.JolokiaDiscovery;
 import org.jolokia.util.JulLogHandler;
 import org.json.simple.JSONObject;
+import org.openjdk.jmc.ui.common.jvm.Connectable;
 import org.openjdk.jmc.ui.common.jvm.JVMDescriptor;
 import org.openjdk.jmc.jolokia.preferences.PreferenceConstants;
 
@@ -28,7 +29,7 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider i
 					JVMDescriptor jvmInfo = JolokiaAgentDescriptor.NULL_DESCRIPTOR;
 					try {// if it is connectable, see if we can get info from connection
 						jvmInfo = JolokiaAgentDescriptor
-								.attemptToGetJvmInfo(new RemoteJmxAdapter(String.valueOf(response.get("url")))); //$NON-NLS-1$
+								.attemptToGetJvmInfo(new RemoteJmxAdapter(String.valueOf(response.get("url"))), Connectable.UNKNOWN); //$NON-NLS-1$
 					} catch (Exception ignore) {
 					}
 					JolokiaAgentDescriptor agentDescriptor = new JolokiaAgentDescriptor(response, jvmInfo);

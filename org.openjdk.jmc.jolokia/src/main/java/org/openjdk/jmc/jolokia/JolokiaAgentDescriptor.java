@@ -63,7 +63,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 	 * Best effort to extract JVM information from a connection if everything works.
 	 * Can be adjusted to support different flavors of JVM
 	 */
-	public static JVMDescriptor attemptToGetJvmInfo(RemoteJmxAdapter adapter) {
+	public static JVMDescriptor attemptToGetJvmInfo(RemoteJmxAdapter adapter, Connectable connectable) {
 
 		try {
 			AttributeList attributes = adapter.getAttributes(new ObjectName(ManagementFactory.RUNTIME_MXBEAN_NAME),
@@ -134,7 +134,7 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 
 			}
 			return new JVMDescriptor(javaVersion, type, arch, javaCommand, arguments, vmName, vmVendor, pid, isDebug,
-					Connectable.UNKNOWN);
+					connectable);
 
 		} catch (Exception ignore) {
 		}

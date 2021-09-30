@@ -9,4 +9,6 @@ public interface KubernetesScanningParameters {
 	String jolokiaPath();
 	String jolokiaProtocol();
 	String requireLabel();
+	boolean optimizeHeapDumps();
+	String tmpHeapDumpPath();
 }

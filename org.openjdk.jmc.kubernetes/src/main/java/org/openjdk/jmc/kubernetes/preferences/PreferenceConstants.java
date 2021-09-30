@@ -13,6 +13,6 @@ public interface PreferenceConstants {
 	public static final String P_JOLOKIA_PROTOCOL = "jolokiaProtocol"; //$NON-NLS-1$
 	public static final String P_USERNAME = "username"; //$NON-NLS-1$
 	public static final String P_PASSWORD = "password"; //$NON-NLS-1$
-
-	
+	public static final String P_OPTIMIZE_HEAP_DUMPS = "optimizeHeapDumps"; //$NON-NLS-1$
+	public static final String P_TMP_HEAP_DUMP_PATH = "tmpHeapDumpPath"; //$NON-NLS-1$
 }

@@ -1,8 +1,13 @@
 package org.openjdk.jmc.kubernetes;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,9 +33,16 @@ import org.openjdk.jmc.jolokia.AbstractCachedDescriptorProvider;
 import org.openjdk.jmc.jolokia.JolokiaAgentDescriptor;
 import org.openjdk.jmc.jolokia.ServerConnectionDescriptor;
 import org.openjdk.jmc.kubernetes.preferences.KubernetesScanningParameters;
+import org.openjdk.jmc.ui.common.jvm.Connectable;
 import org.openjdk.jmc.ui.common.jvm.JVMDescriptor;
 import org.osgi.framework.FrameworkUtil;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.fabric8.kubernetes.api.model.Container;
+import io.fabric8.kubernetes.api.model.ContainerPort;
+import io.fabric8.kubernetes.api.model.DoneablePod;
 import io.fabric8.kubernetes.api.model.NamedContext;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -42,14 +54,12 @@ import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.dsl.ContainerResource;
-import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import io.fabric8.kubernetes.client.dsl.FilterWatchListMultiDeletable;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 import io.fabric8.kubernetes.client.dsl.PodResource;
 import io.fabric8.kubernetes.client.internal.KubeConfigUtils;
 import io.fabric8.kubernetes.client.utils.Utils;
-import okhttp3.Response;
 
 public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvider {
 
@@ -202,16 +212,107 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 		if (jvmClient != null) {
 			JmcKubernetesJmxConnection connection;
 			try {
-				connection = new JmcKubernetesJmxConnection(jvmClient);
-				JVMDescriptor jvmDescriptor = JolokiaAgentDescriptor.attemptToGetJvmInfo(connection);
+				ContainerResource<String, LogWatch, InputStream, PipedOutputStream, OutputStream, PipedInputStream, String, ExecWatch, Boolean, InputStream, Boolean> podHandle = probeAndGetApiHandle(
+						client, pod, metadata, port);
+				env.put(JmcKubernetesJmxConnection.JMC_POD_HANDLE, podHandle);
+				connection = new JmcKubernetesJmxConnection(jvmClient, podHandle);
+				Connectable connectable = Connectable.UNKNOWN;
+				// our fine little hack. Connectable is currently _only_ used to determine
+				// whether heap dumps are local or not
+				// hence abuse this to appear connectable if we are able to copy content out of
+				if (podHandle != null && parameters.optimizeHeapDumps()) {
+					connectable = Connectable.ATTACHABLE;
+				}
+				JVMDescriptor jvmDescriptor = JolokiaAgentDescriptor.attemptToGetJvmInfo(connection, connectable);
 				JMXServiceURL jmxServiceURL = new JMXServiceURL(jmxUrl.toString());
-				KubernetesJvmDescriptor descriptor = new KubernetesJvmDescriptor(metadata, jvmDescriptor,
-						jmxServiceURL, env);
+				KubernetesJvmDescriptor descriptor = new KubernetesJvmDescriptor(metadata, jvmDescriptor, jmxServiceURL,
+						env);
 				found.put(descriptor.getGUID(), descriptor);
 			} catch (IOException e) {
-				Platform.getLog(FrameworkUtil.getBundle(getClass())).error(Messages.KubernetesDiscoveryListener_ErrConnectingToJvm, e);
+				Platform.getLog(FrameworkUtil.getBundle(getClass()))
+						.error(Messages.KubernetesDiscoveryListener_ErrConnectingToJvm, e);
 
 			}
+		}
+	}
+
+	private ContainerResource<String, LogWatch, InputStream, PipedOutputStream, OutputStream, PipedInputStream, String, ExecWatch, Boolean, InputStream, Boolean> probeAndGetApiHandle(
+			KubernetesClient client, Pod pod, final ObjectMeta metadata, final String port) throws IOException {
+		ContainerResource<String, LogWatch, InputStream, PipedOutputStream, OutputStream, PipedInputStream, String, ExecWatch, Boolean, InputStream, Boolean> podHandle = client
+				.pods().inNamespace(metadata.getNamespace()).withName(metadata.getName());
+		podHandle = qualifyWithContainerIfApplicable(pod, port, podHandle);
+		try {
+			ByteArrayOutputStream errorSink = new ByteArrayOutputStream();
+			// Probe by running tar (it is needed to copy content out of container)
+			// https://github.com/kubernetes/kubernetes/issues/58512
+			ExecWatch exec = podHandle.redirectingError().writingErrorChannel(errorSink).exec("tar", "--usage");
+			for (int i = 0; i < 10; i++) {
+				if(errorSink.size()>0) {
+					break;
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException ignore) {
+				}
+			}
+			exec.close();
+			OperationStatus success = parseResponse(errorSink);
+			if (success != null && success.isSuccess()) {
+				return podHandle;
+			} else {
+				return null;
+			}
+
+		} catch (KubernetesClientException e) {
+			return null;
+		}
+
+	}
+
+	private OperationStatus parseResponse(ByteArrayOutputStream source) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		try {
+		OperationStatus success = objectMapper.readerFor(OperationStatus.class)
+				.readValue(source.toByteArray());
+		return success;
+		} catch (Exception ignore) {
+			return null;
+		}
+	}
+
+	private ContainerResource<String, LogWatch, InputStream, PipedOutputStream, OutputStream, PipedInputStream, String, ExecWatch, Boolean, InputStream, Boolean> qualifyWithContainerIfApplicable(
+			Pod pod, final String port,
+			ContainerResource<String, LogWatch, InputStream, PipedOutputStream, OutputStream, PipedInputStream, String, ExecWatch, Boolean, InputStream, Boolean> podHandle) {
+		// only one container, no need to specify
+		if (pod.getSpec().getContainers().size() == 1) {
+			return podHandle;
+		}
+		// try to map to container based on jolokia port
+		if (port != null) {
+			for (Container container : pod.getSpec().getContainers()) {
+				for (ContainerPort containerPort : container.getPorts()) {
+					if (String.valueOf(containerPort.getContainerPort()).equals(port)) {
+						return ((PodResource<Pod, DoneablePod>) podHandle).inContainer(container.getName());
+					}
+				}
+			}
+
+		}
+		// return first container with any ports
+		for (Container container : pod.getSpec().getContainers()) {
+			if (!container.getPorts().isEmpty()) {
+				return ((PodResource<Pod, DoneablePod>) podHandle).inContainer(container.getName());
+			}
+		}
+		return podHandle;
+	}
+
+	static class OperationStatus {
+		public String status;
+
+		boolean isSuccess() {
+			return "Success".equals(status);
 		}
 	}
 
