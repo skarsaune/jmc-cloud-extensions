@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXServiceURL;
 
 import org.apache.commons.codec.binary.Base64;
@@ -38,22 +39,15 @@ import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
-import io.fabric8.kubernetes.client.dsl.ContainerResource;
-import io.fabric8.kubernetes.client.dsl.ExecListener;
-import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import io.fabric8.kubernetes.client.dsl.FilterWatchListMultiDeletable;
-import io.fabric8.kubernetes.client.dsl.LogWatch;
-import io.fabric8.kubernetes.client.dsl.PodResource;
 import io.fabric8.kubernetes.client.internal.KubeConfigUtils;
 import io.fabric8.kubernetes.client.utils.Utils;
-import okhttp3.Response;
 
 public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvider {
 
-	private final Pattern SECRET_PATTERN = Pattern.compile(Messages.KubernetesDiscoveryListener_0);
+	private final Pattern SECRET_PATTERN = Pattern.compile("\\$\\{kubernetes/secret/(?<secretName>[^/]+)/(?<itemName>[^\\}]+)}"); //$NON-NLS-1$
 	private final Pattern ATTRIBUTE_PATTERN = Pattern.compile("\\$\\{kubernetes/annotation/(?<annotationName>[^/]+)}"); //$NON-NLS-1$
 	private final Set<String> VALID_JOLOKIA_PROTOCOLS = new HashSet<>(Arrays.asList("http", "https")); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -151,11 +145,12 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 
 		final ObjectMeta metadata = pod.getMetadata();
 		HashMap<String, String> headers = new HashMap<>();
+		Map<String, Object> env = new HashMap<>();
 		if (notEmpty(parameters.username())) {
 			if (!notEmpty(parameters.password())) {
 				throw new IllegalArgumentException(Messages.KubernetesDiscoveryListener_MustProvidePassword);
 			}
-			authorize(headers, client, parameters.username(), parameters.password(), metadata.getNamespace());
+			authorize(headers, client, parameters.username(), parameters.password(), metadata.getNamespace(), env);
 		}
 		final StringBuilder url = new StringBuilder(metadata.getSelfLink());
 		// JMX url must be reverse constructed, so that we can connect from the
@@ -194,7 +189,6 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 		url.append(path);
 		jmxUrl.append(path);
 
-		Map<String, Object> env = new HashMap<>();
 		if (context != null) {
 			env.put(KubernetesJmxConnector.KUBERNETES_CLIENT_CONTEXT, context);
 		}
@@ -228,7 +222,7 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 	}
 
 	private void authorize(HashMap<String, String> headers, KubernetesClient client, String username, String password,
-			String namespace) {
+			String namespace, Map<String, Object> jmxEnv) {
 
 		final Matcher userNameMatcher = SECRET_PATTERN.matcher(username);
 		String secretName = null;
@@ -249,6 +243,7 @@ public class KubernetesDiscoveryListener extends AbstractCachedDescriptorProvide
 
 		headers.put(AuthorizationHeaderParser.JOLOKIA_ALTERNATE_AUTHORIZATION_HEADER,
 				"Basic " + Base64Util.encode((username + ":" + password).getBytes())); //$NON-NLS-1$ //$NON-NLS-2$
+		jmxEnv.put(JMXConnector.CREDENTIALS, new String[] {username, password});
 
 	}
 

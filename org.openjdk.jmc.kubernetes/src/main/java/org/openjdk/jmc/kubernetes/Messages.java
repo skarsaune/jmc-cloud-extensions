@@ -4,7 +4,6 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.openjdk.jmc.kubernetes.messages"; //$NON-NLS-1$
-	public static String KubernetesDiscoveryListener_0;
 	public static String KubernetesDiscoveryListener_CouldNotFindSecret;
 	public static String KubernetesDiscoveryListener_Description;
 	public static String KubernetesDiscoveryListener_ErrConnectingToJvm;
