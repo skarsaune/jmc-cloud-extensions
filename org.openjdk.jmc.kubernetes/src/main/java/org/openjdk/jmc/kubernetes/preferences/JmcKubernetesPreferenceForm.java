@@ -61,7 +61,7 @@ public class JmcKubernetesPreferenceForm extends FieldEditorPreferencePage
 		this.addTextField(new StringFieldEditor(P_JOLOKIA_PROTOCOL, Messages.JmcKubernetesPreferenceForm_ProtocolLabel,
 				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_ProtocolTooltip);
 		this.addTextField(new StringFieldEditor(P_USERNAME, Messages.JmcKubernetesPreferenceForm_UsernameLabel,
-				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_UesrnameTooltip);
+				getFieldEditorParent()), Messages.JmcKubernetesPreferenceForm_UsernameTooltip);
 		PasswordFieldEditor passwordField = new PasswordFieldEditor(P_PASSWORD,
 				Messages.JmcKubernetesPreferenceForm_PasswordLabel, getFieldEditorParent());
 		String passwordTooltip = Messages.JmcKubernetesPreferenceForm_PasswordTooltip;

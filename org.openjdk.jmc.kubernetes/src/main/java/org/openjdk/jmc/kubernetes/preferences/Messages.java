@@ -17,7 +17,7 @@ public class Messages extends NLS {
 	public static String JmcKubernetesPreferenceForm_ProtocolTooltip;
 	public static String JmcKubernetesPreferenceForm_RequireLabel;
 	public static String JmcKubernetesPreferenceForm_ScanForPods;
-	public static String JmcKubernetesPreferenceForm_UesrnameTooltip;
+	public static String JmcKubernetesPreferenceForm_UsernameTooltip;
 	public static String JmcKubernetesPreferenceForm_UsernameLabel;
 	static {
 		// initialize resource bundle

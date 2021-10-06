@@ -27,7 +27,6 @@ Bundle-ClassPath: target/dependency/jolokia-client-java-1.7.0.jar,
  target/dependency/jolokia-jvm-1.7.0.jar,
  target/dependency/json-simple-1.1.1.jar,
  .,
- target/classes/,
  target/dependency/httpclient-osgi-4.5.3.jar,
  target/dependency/httpcore-4.4.7.jar,
  target/dependency/commons-logging-1.1.1.jar
