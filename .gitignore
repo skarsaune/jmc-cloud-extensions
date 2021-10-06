@@ -25,3 +25,6 @@ hs_err_pid*
 org.eclipse.jmc.jolokia/.metadata/
 update.site/plugins/
 update.site/features/
+.flattened-pom.xml
+org.openjdk.jmc.jolokia/target/
+org.openjdk.jmc.kubernetes/target/
