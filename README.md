@@ -1,7 +1,7 @@
 # Jolokia plugins for Java Mission Control
 
 # Objective
-Allow Java Mission Control to connect to [Jolokia](https://jolokia.org) enabled JVMs runing on prem or in [kubernetes](https://kubernetes.io)
+Allow Java Mission Control to connect to [Jolokia](https://jolokia.org) enabled JVMs over the network or in [kubernetes](https://kubernetes.io)
 
 # Installing
 1. If you have not already, download [eclipse IDE](https://www.eclipse.org/downloads/)
@@ -12,6 +12,8 @@ Allow Java Mission Control to connect to [Jolokia](https://jolokia.org) enabled 
 3. Add Jolokia JMC plugins from the plugin site: https://skarsaune.github.io/jolokia-jmc-update-site
    - If Jolokia and Kubernetes features do not show up, deselect "Group items by category"
    - Install Jolokia and Kubernetes plugins
+   
+[video of installation](https://youtu.be/k0f_xVe-XLY)
 
 # Connecting to JVMs
 ## To connect directly to JVMs with Jolokia over a regular network connection:
@@ -53,6 +55,56 @@ A process will run in the background and update the list of JVMs every 30 second
 
 Any pods that are successfully probed will show up in the JVM Browser hierarchy under kubernetes/context/namespace : ![Pods in JVM Browser!](doc/img/pod-hierarchy.png) 
 
+Example snippet of a helm chart of a deployment that declares properties suitable for scanning from JMC: 
+
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: petclinic
+      namespace: jfr
+      labels:
+        jolokia: 'true'
+        k8s-app: petclinic
+      annotations:
+        deployment.kubernetes.io/revision: '3'
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          k8s-app: petclinic
+      template:
+        metadata:
+          name: petclinic
+          annotations:
+            jolokiaPath: 'jolokia/'
+            jolokiaPort: '8778'
+          labels:
+            k8s-app: petclinic
+            jolokia: 'true'
+        spec:
+          volumes:
+          - name: jolokia-properties
+            secret:
+              secretName: jolokia-properties
+          containers:
+            - name: petclinic
+              image: kantega.azurecr.io/petclinic:latest
+              ports:
+              - name: http
+                containerPort: 8080
+                protocol: TCP
+              - name: jolokia
+                containerPort: 8778
+                protocol: TCP
+              volumeMounts:
+              - name: jolokia-properties
+                readOnly: true
+                mountPath: "/etc/jolokia"
+              env:
+                - name: JAVA_TOOL_OPTIONS
+                  value: "-javaagent:/jolokia-jvm-agent.jar=config=/etc/jolokia/jolokia.properties "
+
+
 
 # To develop or troubleshoot the Jolokia or Kubernetes plugins
 1. Clone jmc `git clone git@github.com:openjdk/jmc.git`
@@ -63,3 +115,9 @@ Any pods that are successfully probed will show up in the JVM Browser hierarchy 
 4. Open the projects in the same workspace as where you have the jmc projects
 5. Debug JMC or Eclipse with JMC with one of the Jolokia or Kubernetes launchers
 6. Feel free to register issues with suggestions or problems in this repo
+
+
+
+
+
+
