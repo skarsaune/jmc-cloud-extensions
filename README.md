@@ -29,7 +29,7 @@ Allow Java Mission Control to connect to [Jolokia](https://jolokia.org) enabled 
 Entries in parenthesis are optional.
    - http is default protocol
    - if the pod has only one port that will be used if portnumber is omitted
-Regexp may be used as part of podname, if you are happy to connect to any pod matching a given pattern.
+   - Regular expression may be used as part of podname, if you are happy to connect to any pod matching a given pattern.
 This can be useful if you want to store a connection string that will work even after redeploys. Example:
    - `service:jmx:kubernetes:///jfr/petclinic-.+:8778/jolokia/`
 
