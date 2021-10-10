@@ -1,0 +1,16 @@
+<FindBugsFilter>
+	<!-- Allowing Eclipse plug-in style singleton default instances -->
+	<Match>
+		<Class name="~org\.openjdk\.jmc\..*Plugin" />
+		<Method name="&lt;init&gt;" />
+		<Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
+	</Match>
+	<!-- complains about default encoding on base64 encoding of basic header 
+		and decoding of kubernetes secret not sure what it should be, and has been 
+		tested ok -->
+	<Match>
+		<Class
+			name="org.openjdk.jmc.kubernetes.KubernetesDiscoveryListener" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
+</FindBugsFilter>

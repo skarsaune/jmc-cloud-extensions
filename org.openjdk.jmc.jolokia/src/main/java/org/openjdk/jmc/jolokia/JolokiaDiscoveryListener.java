@@ -25,11 +25,12 @@ public class JolokiaDiscoveryListener extends AbstractCachedDescriptorProvider i
 				try {
 
 					JSONObject response = (JSONObject) object;
-					JVMDescriptor jvmInfo = JolokiaAgentDescriptor.NULL_DESCRIPTOR;
+					JVMDescriptor jvmInfo;
 					try {// if it is connectable, see if we can get info from connection
 						jvmInfo = JolokiaAgentDescriptor
 								.attemptToGetJvmInfo(new RemoteJmxAdapter(String.valueOf(response.get("url")))); //$NON-NLS-1$
 					} catch (Exception ignore) {
+						jvmInfo = JolokiaAgentDescriptor.NULL_DESCRIPTOR;
 					}
 					JolokiaAgentDescriptor agentDescriptor = new JolokiaAgentDescriptor(response, jvmInfo);
 					found.put(agentDescriptor.getGUID(), agentDescriptor);

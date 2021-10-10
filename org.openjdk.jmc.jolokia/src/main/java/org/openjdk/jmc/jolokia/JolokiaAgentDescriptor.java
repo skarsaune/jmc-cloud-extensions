@@ -137,9 +137,9 @@ public class JolokiaAgentDescriptor implements ServerConnectionDescriptor {
 					Connectable.UNKNOWN);
 
 		} catch (Exception ignore) {
+			return NULL_DESCRIPTOR;
 		}
 
-		return NULL_DESCRIPTOR;
 	}
 
 	@Override

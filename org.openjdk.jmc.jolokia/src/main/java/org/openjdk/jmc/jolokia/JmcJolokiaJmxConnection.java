@@ -3,7 +3,6 @@ package org.openjdk.jmc.jolokia;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.LinkedList;
-import java.util.Stack;
 
 import javax.management.AttributeNotFoundException;
 import javax.management.Descriptor;
@@ -63,6 +62,7 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 			try {
 				localInfo = ManagementFactory.getPlatformMBeanServer().getMBeanInfo(name);
 			} catch (Exception ignore) {
+				localInfo = null;
 			}
 			MBeanOperationInfo[] modifiedOperations = new MBeanOperationInfo[mBeanInfo.getOperations().length];
 
@@ -158,7 +158,7 @@ public class JmcJolokiaJmxConnection extends RemoteJmxAdapter {
 		}
 		// probably more reverse mapping of types should be done here, but we hope it is
 		// sufficient
-		result.setField(ARGUMENT_TYPE, parameter.getType());
+		result.setField(ARGUMENT_TYPE, type);
 		result.setField(ARGUMENT_DESCRIPTION, parameter.getDescription());
 		result.setField(ARGUMENT_MANDATORY, "false"); //$NON-NLS-1$
 		result.setField(ARGUMENT_OPTION, "false"); //$NON-NLS-1$

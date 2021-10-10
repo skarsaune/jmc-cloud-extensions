@@ -8,11 +8,9 @@ import java.util.Map.Entry;
 import org.openjdk.jmc.common.IDescribable;
 import org.openjdk.jmc.rjmx.descriptorprovider.AbstractDescriptorProvider;
 import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorListener;
-import org.openjdk.jmc.rjmx.descriptorprovider.IDescriptorProvider;
 
 @SuppressWarnings("restriction")
-public abstract class AbstractCachedDescriptorProvider extends AbstractDescriptorProvider
-		implements IDescriptorProvider, IDescribable {
+public abstract class AbstractCachedDescriptorProvider extends AbstractDescriptorProvider {
 
 	private static final long LOCAL_REFRESH_INTERVAL = 20000;
 	private Scanner scanner;

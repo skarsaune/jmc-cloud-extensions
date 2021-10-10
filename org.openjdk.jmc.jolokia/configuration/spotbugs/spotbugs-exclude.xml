@@ -1,1 +1,20 @@
-<FindBugsFilter/>
+<FindBugsFilter>
+	<!-- Allowing Eclipse plug-in style singleton default instances -->
+	<Match>
+		<Class name="~org\.openjdk\.jmc\..*Plugin" />
+		<Method name="&lt;init&gt;" />
+		<Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
+	</Match>
+	<!--  We are iterating over very technical system properties, locale is not relevant: -->
+	    <Match>
+	    <Class name="org.openjdk.jmc.jolokia.JolokiaAgentDescriptor"></Class>
+	    <Method name="attemptToGetJvmInfo"></Method>
+        <Bug pattern="DM_CONVERT_CASE"/>
+    </Match>
+    	<!--  Allow swallowing any exception on probing for JVM info -->
+	    <Match>
+	    <Class name="org.openjdk.jmc.jolokia.JolokiaAgentDescriptor"></Class>
+	    <Method name="attemptToGetJvmInfo"></Method>
+        <Bug pattern="REC_CATCH_EXCEPTION"/>
+    </Match>
+</FindBugsFilter>
