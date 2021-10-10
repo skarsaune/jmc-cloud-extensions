@@ -47,23 +47,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jolokia</groupId>
-			<artifactId>jolokia-core</artifactId>
-			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jolokia</groupId>
-			<artifactId>jolokia-client-java</artifactId>
-			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-jmx-adapter</artifactId>
 			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmc</groupId>

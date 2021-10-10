@@ -47,11 +47,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jolokia</groupId>
-			<artifactId>jolokia-jmx-adapter</artifactId>
-			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-kubernetes</artifactId>
 			<version>1.7.0</version>
 		</dependency>
