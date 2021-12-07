@@ -1,9 +1,9 @@
 # Jolokia plugins for Java Mission Control
 
-# Objective
+## Objective
 Allow Java Mission Control to connect to [Jolokia](https://jolokia.org) enabled JVMs over the network or in [kubernetes](https://kubernetes.io)
 
-# Installing
+## Installing
 1. If you have not already, download [eclipse IDE](https://www.eclipse.org/downloads/)
 2. Install Java Mission Control 8.1 or newer from update site : https://github.com/AdoptOpenJDK/openjdk-jmc-overrides/releases/download/8.1.0/org.openjdk.jmc.updatesite.ide-8.1.0.zip
    - Download
@@ -15,13 +15,13 @@ Allow Java Mission Control to connect to [Jolokia](https://jolokia.org) enabled 
    
 [video of installation](https://youtu.be/k0f_xVe-XLY)
 
-# Connecting to JVMs
-## To connect directly to JVMs with Jolokia over a regular network connection:
+## Connecting to JVMs
+### To connect directly to JVMs with Jolokia over a regular network connection:
    - Open the JVM Browser view
    - New Connection
    - Select Custom JMX service URL
    - Enter `service:jmx:jolokia://host:port/path/`
-## To connect to a JVM with Jolokia running in kubernetes
+### To connect to a JVM with Jolokia running in kubernetes
    - Open the JVM Browser view
    - New Connection
    - Select Custom JMX service URL
@@ -33,14 +33,14 @@ Entries in parenthesis are optional.
 This can be useful if you want to store a connection string that will work even after redeploys. Example:
    - `service:jmx:kubernetes:///jfr/petclinic-.+:8778/jolokia/`
 
-## To use [Jolokia Discovery](https://jolokia.org/reference/html/protocol.html#discovery) to detect JVMs running with Jolokia
+### To use [Jolokia Discovery](https://jolokia.org/reference/html/protocol.html#discovery) to detect JVMs running with Jolokia
 
 Under JDK Mission Control \ JVM Browser \ Jolokia , check "Discover Jolokia Agents".
 A process will run in the background and update the list of JVMs every 30 seconds
 
 ![Settings to discover Jolokia!](doc/img/jolokia-discover.png)
 
-## To scan kubernetes for JVMs
+### To scan kubernetes for JVMs
 
 Under JDK Mission Control \ JVM Browser \ Kubernetes , check "Scan for kubernetes pods with Jolokia support".
 A process will run in the background and update the list of JVMs every 30 seconds
@@ -106,7 +106,7 @@ Example snippet of a helm chart of a deployment that declares properties suitabl
 
 
 
-# To develop or troubleshoot the Jolokia or Kubernetes plugins
+## To develop or troubleshoot the Jolokia or Kubernetes plugins
 1. Clone jmc `git clone git@github.com:openjdk/jmc.git`
 2. Follow instructions to build
 3. Open the projects in an Eclipse workspace
@@ -116,6 +116,10 @@ Example snippet of a helm chart of a deployment that declares properties suitabl
 5. Debug JMC or Eclipse with JMC with one of the Jolokia or Kubernetes launchers
 6. Feel free to register issues with suggestions or problems in this repo
 
+#Visual VM plugin
+
+1. Download plugin https://skarsaune.github.io/jolokia-jmc-update-site/visualvm/org-jolokia-jmx-plugin.nbm
+2. Add downloaded plugin and choose install ![image](https://user-images.githubusercontent.com/6298906/145103892-34755f45-507a-45a4-8c9e-6978d04155a5.png)
 
 
 
